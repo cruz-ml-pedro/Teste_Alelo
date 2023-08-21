@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Teste_Alelo - Clustering</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Teste_Alelo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html" rel="" target="">
+ <span class="menu-text">index</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./cleaning.html" rel="" target="">
+ <span class="menu-text">Cleaning</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./clustering.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Clustering</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./classification.html" rel="" target="">
+ <span class="menu-text">Classificação</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./regression.html" rel="" target="">
+ <span class="menu-text">Regressão</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./bonus.html" rel="" target="">
+ <span class="menu-text">Bônus</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tarefa-de-clustering" id="toc-tarefa-de-clustering" class="nav-link active" data-scroll-target="#tarefa-de-clustering">Tarefa de Clustering</a>
+  <ul class="collapse">
+  <li><a href="#abordagem-escolhida" id="toc-abordagem-escolhida" class="nav-link" data-scroll-target="#abordagem-escolhida">Abordagem escolhida</a>
+  <ul class="collapse">
+  <li><a href="#vamos-começar-carregando-os-dados." id="toc-vamos-começar-carregando-os-dados." class="nav-link" data-scroll-target="#vamos-começar-carregando-os-dados.">Vamos começar carregando os dados.</a></li>
+  <li><a href="#corrigindo-os-dados" id="toc-corrigindo-os-dados" class="nav-link" data-scroll-target="#corrigindo-os-dados">“Corrigindo” os dados</a></li>
+  </ul></li>
+  <li><a href="#pré-diagnósticos---tendência-de-agrupamento." id="toc-pré-diagnósticos---tendência-de-agrupamento." class="nav-link" data-scroll-target="#pré-diagnósticos---tendência-de-agrupamento.">Pré-diagnósticos - tendência de agrupamento.</a></li>
+  <li><a href="#número-ideal-de-clusters" id="toc-número-ideal-de-clusters" class="nav-link" data-scroll-target="#número-ideal-de-clusters">Número ideal de clusters</a></li>
+  <li><a href="#usando-k-mean" id="toc-usando-k-mean" class="nav-link" data-scroll-target="#usando-k-mean">usando k-mean</a>
+  <ul class="collapse">
+  <li><a href="#dois-grupos" id="toc-dois-grupos" class="nav-link" data-scroll-target="#dois-grupos">Dois Grupos</a></li>
+  <li><a href="#três-grupos" id="toc-três-grupos" class="nav-link" data-scroll-target="#três-grupos">Três grupos</a></li>
+  </ul></li>
+  <li><a href="#avaliando-os-clusters" id="toc-avaliando-os-clusters" class="nav-link" data-scroll-target="#avaliando-os-clusters">Avaliando os clusters</a></li>
+  <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
+  <li><a href="#resposta-das-perguntas" id="toc-resposta-das-perguntas" class="nav-link" data-scroll-target="#resposta-das-perguntas">Resposta das perguntas</a></li>
+  <li><a href="#salvando-os-dados" id="toc-salvando-os-dados" class="nav-link" data-scroll-target="#salvando-os-dados">Salvando os dados</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Clustering</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse ,tidymodels,fpc, factoextra, psych, hopkins, cluster, knitr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">cache =</span> <span class="cn">TRUE</span>, <span class="at">cache.lazy =</span> <span class="cn">FALSE</span>, <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">message =</span> <span class="cn">FALSE</span>, <span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">dpi =</span> <span class="dv">180</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fig.width =</span> <span class="dv">8</span>, <span class="at">fig.height =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="tarefa-de-clustering" class="level1">
+<h1>Tarefa de Clustering</h1>
+<section id="abordagem-escolhida" class="level2">
+<h2 class="anchored" data-anchor-id="abordagem-escolhida">Abordagem escolhida</h2>
+<p>Para esta tarefa, optei pelo algoritmo K-means, convertendo os dados categóricos em binários. Minha escolha recai nessa direção, pois apesar de eu não estar familiarizado com métodos de agrupamento para dados categóricos, compreendo que sua interpretação é mais direta. Portanto, para simplificar, optei por transformar as variáveis categóricas em binárias usando a codificação one-hot.</p>
+<p>Sei que existem outras técnicas para lidar com esse tipo de dados, como o método k-prototype, por exemplo. Entretanto, a implementação dessa abordagem, que presumo ser mais apropriada, começou a consumir considerável tempo. Essa circunstância motivou-me a alterar minha estratégia.</p>
+<p>Essa mudança de abordagem teve como objetivo permitir um progresso mais eficiente em minha análise.</p>
+<section id="vamos-começar-carregando-os-dados." class="level3">
+<h3 class="anchored" data-anchor-id="vamos-começar-carregando-os-dados.">Vamos começar carregando os dados.</h3>
+<p>Ao carregar os dados eu alterei a classe das colunas de logic para character. Isso vai me facilitar mais para frente.</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-2_7f19942658886d34fa4ea8634d51b68c">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"dados_limpos.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.logical), as.character)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="corrigindo-os-dados" class="level3">
+<h3 class="anchored" data-anchor-id="corrigindo-os-dados">“Corrigindo” os dados</h3>
+<p>Vou começar criando um plano de ação para lidar com diversos “problemas” nos dados, incluindo o fato de o K-means ser um algoritmo projetado para dados numéricos, o que requer a transformação das variáveis categóricas em dummies.</p>
+<p>Aqui está o que será feito:</p>
+<p>Remoção da coluna “name”: A coluna “name” será removida.</p>
+<ul>
+<li><p>Tratamento de valores faltantes em variáveis categóricas: Os valores faltantes nas variáveis categóricas serão tratados usando um modelo KNN (K-Nearest Neighbors).</p></li>
+<li><p>Tratamento de valores faltantes em variáveis numéricas: Os valores faltantes nas variáveis numéricas serão tratados usando os valores médios da coluna.</p></li>
+<li><p>Tratamento de categorias desbalanceadas: Categorias com desbalanceamento serão agrupadas em uma categoria “other”.</p></li>
+<li><p>Transformação de categorias em binárias: As categorias serão transformadas em variáveis binárias usando a codificação one-hot.</p></li>
+<li><p>Normalização de colunas numéricas: As colunas numéricas serão normalizadas, e uma transformação Box-Cox será testada para aproximar a distribuição da normalidade.</p></li>
+<li><p>Remoção de variáveis altamente dispersas e desbalanceadas: A função step_nzv() será usada para remover variáveis que são altamente dispersas e desbalanceadas.</p></li>
+</ul>
+<p>(Apenas para esclarecer, ao remover as variáveis com baixa frequência relativa, minha intenção era a mesma do método step_nzv(). Após realizar alguns testes, considerando a remoção e a não remoção das variáveis, optei por removê-las da maneira descrita no documento de limpeza de dados e, por uma questão de segurança, escolhi também utilizar a função mencionada.)</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-3_dc210266352b6b914cc7b2e5f5d52400">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>recipe_kmeans <span class="ot">&lt;-</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(<span class="sc">~</span> ., <span class="at">data =</span> dados_prontos) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_rm</span>(name, gender, alignment,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>          eye_color,hair_color,race,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>          publisher,categoria_imc,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>          height, imc, weight) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#step_impute_knn(all_nominal_predictors(), neighbors = 5) %&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#step_other(all_nominal_predictors(), threshold = 0.1) %&gt;% </span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_mean</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#step_BoxCox(all_numeric_predictors()) %&gt;%</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_nzv</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Após conduzir alguns testes, decidi remover algumas das variáveis. Essa escolha será devidamente justificada mais adiante; por enquanto, menciono isso apenas para explicar as linhas comentadas na seção de criação da “receita” dos dados.</p>
+<p>“Preparando” a receita e visualizando os dados.</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-4_c43e2efd824186bbb57a7aa60d9eb109">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#vamos ver como os dados ficaram</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dados_cluster <span class="ot">&lt;-</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  recipe_kmeans <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prep</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dados_cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 47
+  n_poderes agility_FALSE. agility_TRUE. accelerated_healing_FALSE.
+      &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;                      &lt;dbl&gt;
+1   -0.198               1             0                          0
+2    1.38                0             1                          0
+3   -1.25                1             0                          1
+4   -0.0221              1             0                          0
+5    1.03                1             0                          1
+6    0.505               1             0                          1
+# ℹ 43 more variables: accelerated_healing_TRUE. &lt;dbl&gt;,
+#   durability_FALSE. &lt;dbl&gt;, durability_TRUE. &lt;dbl&gt;, stealth_FALSE. &lt;dbl&gt;,
+#   stealth_TRUE. &lt;dbl&gt;, energy_absorption_FALSE. &lt;dbl&gt;,
+#   energy_absorption_TRUE. &lt;dbl&gt;, flight_FALSE. &lt;dbl&gt;, flight_TRUE. &lt;dbl&gt;,
+#   marksmanship_FALSE. &lt;dbl&gt;, marksmanship_TRUE. &lt;dbl&gt;,
+#   weapons_master_FALSE. &lt;dbl&gt;, weapons_master_TRUE. &lt;dbl&gt;,
+#   longevity_FALSE. &lt;dbl&gt;, longevity_TRUE. &lt;dbl&gt;, intelligence_FALSE. &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+<p>Durante a etapa de preparação dos dados, removi os nomes dos personagens. Agora, irei reinseri-los como nomes das linhas. Isso possibilitará visualizar os nomes dos personagens nos clusters.</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-5_3082d3ba98c2c509f9fbbdcdceb6ca64">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#colocando os nomes novamente nos dados</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dados_cluster <span class="ot">&lt;-</span> <span class="fu">tibble</span>(dados_prontos[,<span class="dv">1</span>], dados_cluster) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">"name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="pré-diagnósticos---tendência-de-agrupamento." class="level2">
+<h2 class="anchored" data-anchor-id="pré-diagnósticos---tendência-de-agrupamento.">Pré-diagnósticos - tendência de agrupamento.</h2>
+<p>Antes de iniciarmos, vamos verificar a tendência dos dados para serem clusterizados.</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-6_e2491e9fc9819b6bbb128d7e57ae6c14">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>hopkins<span class="sc">::</span><span class="fu">hopkins</span>(dados_cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9971948</code></pre>
+</div>
+</div>
+<p>Um valor de aproximadamente 1 em um teste de Hopkins indica que os pontos no conjunto de dados têm uma tendência significativa de se agruparem mais próximos uns dos outros do que de pontos gerados aleatoriamente. Em outras palavras, um valor próximo de 1 sugere que há uma forte tendência de formação de clusters nos seus dados, o que é um indicativo positivo para a aplicação de algoritmos de clusterização.</p>
+<p>Vamos prosseguir com mais um teste.</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-7_c31b4397ab6246870efdc887fcdc0f65">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cor_mix <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span><span class="dv">0</span><span class="sc">+</span>., <span class="at">data =</span> dados_cluster) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>(<span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">KMO</span>(cor_mix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Error in solve.default(r) : 
+  Lapack routine dgesv: system is exactly singular: U[21,21] = 0</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Kaiser-Meyer-Olkin factor adequacy
+Call: psych::KMO(r = cor_mix)
+Overall MSA =  0.5
+MSA for each item = 
+                 n_poderes             agility_FALSE. 
+                       0.5                        0.5 
+             agility_TRUE. accelerated_healing_FALSE. 
+                       0.5                        0.5 
+ accelerated_healing_TRUE.          durability_FALSE. 
+                       0.5                        0.5 
+          durability_TRUE.             stealth_FALSE. 
+                       0.5                        0.5 
+             stealth_TRUE.   energy_absorption_FALSE. 
+                       0.5                        0.5 
+   energy_absorption_TRUE.              flight_FALSE. 
+                       0.5                        0.5 
+              flight_TRUE.        marksmanship_FALSE. 
+                       0.5                        0.5 
+        marksmanship_TRUE.      weapons_master_FALSE. 
+                       0.5                        0.5 
+      weapons_master_TRUE.           longevity_FALSE. 
+                       0.5                        0.5 
+           longevity_TRUE.        intelligence_FALSE. 
+                       0.5                        0.5 
+        intelligence_TRUE.      super_strength_FALSE. 
+                       0.5                        0.5 
+      super_strength_TRUE.           telepathy_FALSE. 
+                       0.5                        0.5 
+           telepathy_TRUE.       energy_blasts_FALSE. 
+                       0.5                        0.5 
+       energy_blasts_TRUE.             stamina_FALSE. 
+                       0.5                        0.5 
+             stamina_TRUE.         super_speed_FALSE. 
+                       0.5                        0.5 
+         super_speed_TRUE.       teleportation_FALSE. 
+                       0.5                        0.5 
+       teleportation_TRUE.     enhanced_senses_FALSE. 
+                       0.5                        0.5 
+     enhanced_senses_TRUE.         immortality_FALSE. 
+                       0.5                        0.5 
+         immortality_TRUE.            reflexes_FALSE. 
+                       0.5                        0.5 
+            reflexes_TRUE.     invulnerability_FALSE. 
+                       0.5                        0.5 
+     invulnerability_TRUE.        force_fields_FALSE. 
+                       0.5                        0.5 
+        force_fields_TRUE.    enhanced_hearing_FALSE. 
+                       0.5                        0.5 
+    enhanced_hearing_TRUE.      uncommon_power_FALSE. 
+                       0.5                        0.5 
+      uncommon_power_TRUE. 
+                       0.5 </code></pre>
+</div>
+</div>
+<p>Um valor de KMO mais baixo (por exemplo, abaixo de 0.5) pode sugerir que as correlações entre as variáveis não são muito robustas, o que pode tornar a interpretação dos fatores mais desafiadora.</p>
+<p>Os resultados dos testes acabaram sendo um pouco conflitantes, no entanto, vamos continuar.</p>
+</section>
+<section id="número-ideal-de-clusters" class="level2">
+<h2 class="anchored" data-anchor-id="número-ideal-de-clusters">Número ideal de clusters</h2>
+<p>Vamos determinar o número ideal de clusters para nossos dados. Faremos isso usando a função fviz_nbclust do pacote factoextra e três métodos empíricos diferentes: silhouette, wss e gap_stat.</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-8_d4a887ff2e9fa159d64af207e671278f">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>factoextra<span class="sc">::</span><span class="fu">fviz_nbclust</span>(dados_cluster,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">FUNcluster =</span> kmeans,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="fu">c</span>(<span class="st">"silhouette"</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">k.max =</span> <span class="dv">8</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">nboot =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="clustering_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-9_fe24ca11b2fc921a7aa0c7f16ec80ac8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>factoextra<span class="sc">::</span><span class="fu">fviz_nbclust</span>(dados_cluster,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">FUNcluster =</span> kmeans,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="fu">c</span>(<span class="st">"wss"</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">k.max =</span> <span class="dv">8</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">nboot =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="clustering_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-10_6cfe260504ffe6dd42bcf7c2bf528c4a">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>factoextra<span class="sc">::</span><span class="fu">fviz_nbclust</span>(dados_cluster,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">FUNcluster =</span> kmeans,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="fu">c</span>(<span class="st">"gap_stat"</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">k.max =</span> <span class="dv">8</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">nboot =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="clustering_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Os resultados indicam que o número ideal de grupos pode estar entre 2 e 3.</p>
+</section>
+<section id="usando-k-mean" class="level2">
+<h2 class="anchored" data-anchor-id="usando-k-mean">usando k-mean</h2>
+<p>Vamos testar os valores de 2 e 3 grupos.</p>
+<section id="dois-grupos" class="level3">
+<h3 class="anchored" data-anchor-id="dois-grupos">Dois Grupos</h3>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-11_7150b506917509c7f822157b2b6599b6">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>k2<span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">kmeans</span>(dados_cluster, <span class="at">centers =</span> <span class="dv">2</span>, <span class="at">nstart =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-12_e27c0078e4cab7185ecf2a70e1286e37">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>factoextra<span class="sc">::</span><span class="fu">fviz_cluster</span>(k2,<span class="at">data =</span> dados_cluster, <span class="at">star.plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="clustering_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+<section id="três-grupos" class="level3">
+<h3 class="anchored" data-anchor-id="três-grupos">Três grupos</h3>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-13_777195e2d2fa24d204a2769d6e54d030">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">789</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>k3 <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">kmeans</span>(dados_cluster, <span class="at">centers =</span> <span class="dv">3</span>, <span class="at">nstart =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-14_f3fdc11412ee8c36cff9d016c03ea534">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>factoextra<span class="sc">::</span><span class="fu">fviz_cluster</span>(k3,<span class="at">data =</span> dados_cluster, <span class="at">star.plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="clustering_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Eu conduzi testes utilizando diferentes variáveis. A configuração de cluster que apresentou os melhores resultados com todos os dados disponíveis foi a de 2 grupos. No entanto, ao realizar um teste apenas com as variáveis relacionadas aos poderes dos personagens, o resultado mais favorável foi obtido com três grupos.</p>
+<p>Os resultados para dois grupos foram bastante consistentes, tanto considerando quanto desconsiderando as informações dos dados em heroes_information. Porém, quando avaliamos três grupos, os resultados com a inclusão dessas variáveis não demonstraram uma separação tão clara.</p>
+<p>A seguir estão os resultados obtidos com todas as variáveis para fins de comparação.</p>
+<p>Resultado com todas as variáveis para 3 clusters:</p>
+<div class="cell" data-layout-align="center" data-hash="clustering_cache/html/unnamed-chunk-15_1b2bb915fceb4299661fff8524abd9ca">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="completo_2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Resultado com todas as variáveis para 3 clusters:</p>
+<div class="cell" data-layout-align="center" data-hash="clustering_cache/html/unnamed-chunk-16_7805826442a69623615a7cbeb4ef98cd">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="completo_3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="avaliando-os-clusters" class="level2">
+<h2 class="anchored" data-anchor-id="avaliando-os-clusters">Avaliando os clusters</h2>
+<p>Vou comparar somente os resultados obtidos após a remoção das variáveis provenientes dos dados heroes_information.</p>
+<p>Resultados para 2 clusters:</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-17_6d2b176f19976275a89cea615cfdce25">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cls <span class="ot">&lt;-</span> <span class="fu">cluster.stats</span>(dados_cluster, k2<span class="sc">$</span>cluster)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>cls<span class="sc">$</span>pearsongamma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0004729797</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cls<span class="sc">$</span>entropy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6851916</code></pre>
+</div>
+</div>
+<p>Resultados para 3 clusters:</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-18_11f7ee62df2c5e0fdd5d9fca5c46c930">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>cls <span class="ot">&lt;-</span><span class="fu">cluster.stats</span>(dados_cluster, k3<span class="sc">$</span>cluster)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>cls<span class="sc">$</span>pearsongamma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00096131</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cls<span class="sc">$</span>entropy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.954733</code></pre>
+</div>
+</div>
+<p>Ambos os resultados possuem valores do índice Pearson Gamma próximos de 0, o que sugere que há uma associação limitada entre os clusters comparados.</p>
+<p>No entanto, o valor de entropia foi menor para o resultado de dois clusters, 0.68. Valores de entropia mais próximos de 0 indicam uma melhor separação entre os clusters.</p>
+<p>Outra abordagem para avaliar os resultados é utilizar a proporção TotWithinSS/TotSS. Essa proporção auxilia na avaliação da qualidade do agrupamento, indicando o quanto da variabilidade total dos dados é explicada pelos clusters. Quanto maior a proporção, mais eficaz é o agrupamento.</p>
+<p>A proporção explicada nos resultados com dois grupos é:</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-19_88f842933590d6d239bad24ee41a48f1">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>k2<span class="sc">$</span>tot.withinss <span class="sc">/</span> k2<span class="sc">$</span>totss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7915277</code></pre>
+</div>
+</div>
+<p>A proporção explicada nos resultados com dois grupos é:</p>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-20_006d476b177085d78a8af67ebd263dc4">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>k3<span class="sc">$</span>tot.withinss <span class="sc">/</span> k3<span class="sc">$</span>totss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7301921</code></pre>
+</div>
+</div>
+<p>Os resultados foram bastante semelhantes, mas na minha opinião, a divisão em três grupos parece mais apropriada, mesmo que os resultados sejam um pouco inferiores.</p>
+<p>Uma explicação possível, que se aplica tanto a dois grupos quanto a três grupos, é a seguinte:</p>
+</section>
+<section id="conclusão" class="level2">
+<h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
+<p>Minha interpretação dos agrupamentos é a seguinte:</p>
+<p>Os personagens podem ser divididos em três grupos: o Grupo 2 consiste em personagens mais fracos, provavelmente humanos com algumas habilidades. O Grupo 1 engloba os personagens intermediários, com certo nível de poder. E o Grupo 3 é composto pelos personagens mais fortes.</p>
+<p>A utilização das variáveis vindas dos dados heroes_information, parece ter causado uma pior separação quando usado 3 grupos.</p>
+<p>A descrição inicial da preparação dos dados acabou ficando um pouco mais concisa devido à remoção de parte dos dados após os testes.</p>
+</section>
+<section id="resposta-das-perguntas" class="level2">
+<h2 class="anchored" data-anchor-id="resposta-das-perguntas">Resposta das perguntas</h2>
+<ol type="1">
+<li>Qual algoritmo você escolheu e por quê?</li>
+</ol>
+<p>Conforme mencionado inicialmente, a escolha do algoritmo K-means foi motivada pelo fato de ser relativamente simples de entender e interpretar. Além disso, o K-means é altamente flexível, podendo ser aplicado em uma ampla gama de domínios e tipos de dados. Ele não demanda suposições específicas sobre a distribuição dos dados, o que o torna uma escolha versátil para diferentes cenários.</p>
+<p>Embora o K-means não exija suposições específicas sobre a distribuição dos dados, você realizou tentativas nesse sentido durante a preparação dos dados.</p>
+<ol start="2" type="1">
+<li>Quais recursos você usou e por quê? Explique qualquer pré-processamento ou engenharia de recursos (seleção) que você executou.</li>
+</ol>
+<p>Espero que a resposta para essa pergunta tenha sido abordada de maneira adequada na seção de limpeza de dados e também no início desta seção de clusterização. Além disso, parte da seleção de recursos foi realizada após a realização de diversos testes.</p>
+<p>Vou resumir novamente os principais pontos abordados:</p>
+<ul>
+<li>Remoção de colunas em que a frequência relativa dos casos positivos era inferior a 10%.</li>
+<li>Tratamento de valores ausentes em variáveis categóricas utilizando um modelo KNN (“bagged tree” foi escolhido devido ao tempo de processamento).</li>
+<li>Tratamento de valores ausentes em variáveis categóricas usando a imputação dos valores médios da coluna.</li>
+<li>Tratamento de categorias desbalanceadas através da agregação em uma categoria “other”.</li>
+<li>Conversão das categorias em variáveis binárias usando a codificação one-hot.</li>
+<li>Normalização das colunas numéricas e experimentação com a transformação Box-Cox para aproximação da distribuição normal.</li>
+<li>Remoção de variáveis que possuíam alta dispersão e desbalanceamento usando a função step_nzv().</li>
+</ul>
+<ol start="3" type="1">
+<li>Um dos desafios do clustering é definir o número certo de clusters. Como você escolheu esse número? Como você avalia a qualidade dos clusters finais?</li>
+</ol>
+<p>Minha abordagem para escolher o número de clusters foi baseada na utilização de métodos empíricos amplamente empregados. Por meio dos gráficos gerados pelos métodos do cotovelo, silhueta e gap estatístico, foi possível identificar uma faixa de valores prováveis para o número de grupos no conjunto de dados. Essas quantidades foram posteriormente selecionadas e comparadas por meio de diversas métricas.</p>
+<p>Os resultados obtidos parecem promissores, uma vez que os grupos foram separados de maneira relativamente clara e discernível.</p>
+</section>
+<section id="salvando-os-dados" class="level2">
+<h2 class="anchored" data-anchor-id="salvando-os-dados">Salvando os dados</h2>
+<div class="cell" data-hash="clustering_cache/html/unnamed-chunk-21_9577cf1a6d128e9afee91d6a205d5c97">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="ot">&lt;-</span> dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">grupo =</span> k3<span class="sc">$</span>cluster, </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">grupo =</span> <span class="fu">case_when</span>(</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>           grupo <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">"forte"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>           grupo <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"intermediario"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>           grupo <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"fraco"</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(dados_prontos, <span class="at">file =</span> <span class="st">"dados_clust.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

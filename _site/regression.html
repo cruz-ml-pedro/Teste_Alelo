@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Teste_Alelo - Regressão</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Teste_Alelo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html" rel="" target="">
+ <span class="menu-text">index</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./cleaning.html" rel="" target="">
+ <span class="menu-text">Cleaning</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./clustering.html" rel="" target="">
+ <span class="menu-text">Clustering</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./classification.html" rel="" target="">
+ <span class="menu-text">Classificação</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./regression.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Regressão</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./bonus.html" rel="" target="">
+ <span class="menu-text">Bônus</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#regressão" id="toc-regressão" class="nav-link active" data-scroll-target="#regressão">Regressão</a>
+  <ul class="collapse">
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
+  <li><a href="#construindo-modelo" id="toc-construindo-modelo" class="nav-link" data-scroll-target="#construindo-modelo">construindo modelo</a></li>
+  <li><a href="#divisão-treinoteste" id="toc-divisão-treinoteste" class="nav-link" data-scroll-target="#divisão-treinoteste">Divisão Treino/Teste</a></li>
+  <li><a href="#validação-cruzada" id="toc-validação-cruzada" class="nav-link" data-scroll-target="#validação-cruzada">Validação cruzada</a></li>
+  <li><a href="#especificações-dos-dados" id="toc-especificações-dos-dados" class="nav-link" data-scroll-target="#especificações-dos-dados">Especificações dos dados</a></li>
+  <li><a href="#especificações-do-modelo" id="toc-especificações-do-modelo" class="nav-link" data-scroll-target="#especificações-do-modelo">Especificações do modelo</a></li>
+  <li><a href="#criando-um-fluxo-de-trabalho" id="toc-criando-um-fluxo-de-trabalho" class="nav-link" data-scroll-target="#criando-um-fluxo-de-trabalho">Criando um fluxo de trabalho</a></li>
+  <li><a href="#ajustando-o-modelo-aos-dados" id="toc-ajustando-o-modelo-aos-dados" class="nav-link" data-scroll-target="#ajustando-o-modelo-aos-dados">Ajustando o modelo aos dados</a></li>
+  <li><a href="#avaliando-os-resultados" id="toc-avaliando-os-resultados" class="nav-link" data-scroll-target="#avaliando-os-resultados">Avaliando os resultados</a></li>
+  <li><a href="#respostas" id="toc-respostas" class="nav-link" data-scroll-target="#respostas">Respostas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Regressão</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">cache =</span> <span class="cn">TRUE</span>, <span class="at">cache.lazy =</span> <span class="cn">FALSE</span>, <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">message =</span> <span class="cn">FALSE</span>, <span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">dpi =</span> <span class="dv">180</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fig.width =</span> <span class="dv">8</span>, <span class="at">fig.height =</span> <span class="dv">5</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(knitr,tidyverse ,tidymodels,klaR, discrim, themis, finetune, earth, ranger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-2_d245f257ad0ec4c44140697d8562e829">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"dados_limpos.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="regressão" class="level1">
+<h1>Regressão</h1>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<p>Vou começar essa tarefa com a seleção de recursos. Durante a limpeza dos dados eu cheguei a verificar os valores de correlação entre as variáveis numéricas, mas vamos avalia-las novamente e visualizar sua distribuição.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-3_f1e99cb9fdebe12dd52a16091b4c6517">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggpairs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>As curvas de densidade parecem seguir uma distribuição normal, exceto pela variável “n_poderes”, que exibe uma cauda mais longa. Notavelmente, a variável “n_poderes” não demonstra uma correlação significativa com as demais variáveis. Entretanto, “peso” e “altura”, “peso” e “IMC”, e “IMC” e “altura” exibem correlações notáveis. Os gráficos de dispersão apontam para uma relação linear entre essas variáveis.</p>
+<p>Agora vamos verificar como é a distribuição do nosso alvo em relação as variáveis categóricas.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-4_5684ccf089f82d375984d94aa2dc6190">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender =</span> <span class="fu">fct_lump</span>(gender, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(gender,weight, <span class="at">color=</span>gender))<span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>A variável “gênero” parece ser uma fonte promissora de informação para o nosso modelo.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-5_0bac951430d3189c766272b55ec5658c">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">eye_color =</span> <span class="fu">fct_lump</span>(eye_color, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(eye_color,weight, <span class="at">color=</span>eye_color))<span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Apesar das limitações associadas à variável “cor dos olhos”, ela também parece ser uma valiosa fonte de informações.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-6_1fcd2e1549413e9bf89b2e9b1b9bb0e8">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">race =</span> <span class="fu">fct_lump</span>(race, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(race,weight, <span class="at">color=</span>race))<span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>As médias dos valores não parecem exibir grandes discrepâncias ao analisarmos as diferentes raças. É importante ter em mente que algumas categorias têm amostragens reduzidas.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-7_eb61080dfc9ad8a90b7965d7659c0f50">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">hair_color =</span> <span class="fu">fct_lump</span>(hair_color, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(hair_color,weight, <span class="at">color=</span>hair_color))<span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Da mesma forma que a variável anterior, a cor dos cabelos não parece fornecer muita informação em relação ao peso.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-8_3fd153c771772009236683121e2820fe">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="fu">fct_lump</span>(publisher, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(publisher,weight, <span class="at">color=</span>publisher))<span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>A variável “editora” também não parece ser muito informativa.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-9_a20149a9117c3dc5feb2947680949cde">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">alignment =</span> <span class="fu">fct_lump</span>(alignment, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,weight, <span class="at">color=</span>alignment))<span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Não parece que o alinhamento tem relação com o peso.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-10_5c2fe4c28945fc2e33ce05a33565d582">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">categoria_imc =</span> <span class="fu">fct_lump</span>(categoria_imc, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(categoria_imc,weight, <span class="at">color=</span>categoria_imc))<span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>É evidente que essas categorias têm uma forte relação com o peso dos personagens, uma vez que foram construídas a partir das variáveis de peso e altura.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-11_9354f678b2c1e616cc9ea4e9d501ccbb">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.logical), as.factor),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">super_strength =</span> <span class="fu">fct_lump</span>(super_strength)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(super_strength,weight, <span class="at">color=</span>super_strength))<span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Não irei apresentar todos os resultados, mas de maneira geral, as variáveis relacionadas ao tipo de poder não parecem ser informativas.</p>
+<p>As únicas variáveis que aparentemente podem ser úteis são “super_strength”, “invulnerability” e “durability”.</p>
+<p>Vamos ver em relação ao número de poderes que cada personagem possui.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-12_d4fcce3475a3379352fd636077a7626c">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_poderes =</span> <span class="fu">as.factor</span>(n_poderes),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_poderes =</span> <span class="fu">fct_lump</span>(n_poderes, <span class="at">n=</span><span class="dv">10</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_poderes,weight, <span class="at">color=</span>n_poderes))<span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>A quantidade de poderes de cada personagem aparentemente não possui relação com o peso do personagem. No entanto, essa conclusão pode necessitar de uma análise mais aprofundada. Por enquanto, não vou criar uma variável categórica que represente o número de poderes por personagem.</p>
+</section>
+<section id="construindo-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="construindo-modelo">construindo modelo</h2>
+<p>Vou começar selecionando apenas as variáveis que foram escolhidas durante a análise exploratória dos dados.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-13_738d2bd439fb0ebb5277e8943c925282">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dados_regre <span class="ot">&lt;-</span> dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a> dplyr<span class="sc">::</span><span class="fu">select</span>(weight,imc,height,categoria_imc,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>               super_strength,invulnerability,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>               gender,eye_color) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">where</span>(is.logical), as.character)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="divisão-treinoteste" class="level2">
+<h2 class="anchored" data-anchor-id="divisão-treinoteste">Divisão Treino/Teste</h2>
+<p>Esta etapa segue as mesmas especificações, com uma proporção de 70% para treinamento e 30% para teste.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-14_6179a6640aadc3768affbfc0ebeaeb47">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>heroes_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dados_regre, <span class="at">strata =</span> <span class="st">"weight"</span>, <span class="at">prop =</span> <span class="fl">0.7</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(heroes_split)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">testing</span>(heroes_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="validação-cruzada" class="level2">
+<h2 class="anchored" data-anchor-id="validação-cruzada">Validação cruzada</h2>
+<p>Criando as partições para executar a validação cruzada.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-15_9f46757f1e791f5f4adbe28c9260e17c">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cv_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(train, <span class="at">strata =</span> <span class="st">"weight"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>cv_folds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#  10-fold cross-validation using stratification 
+# A tibble: 10 × 2
+   splits           id    
+   &lt;list&gt;           &lt;chr&gt; 
+ 1 &lt;split [400/47]&gt; Fold01
+ 2 &lt;split [400/47]&gt; Fold02
+ 3 &lt;split [400/47]&gt; Fold03
+ 4 &lt;split [401/46]&gt; Fold04
+ 5 &lt;split [403/44]&gt; Fold05
+ 6 &lt;split [403/44]&gt; Fold06
+ 7 &lt;split [404/43]&gt; Fold07
+ 8 &lt;split [404/43]&gt; Fold08
+ 9 &lt;split [404/43]&gt; Fold09
+10 &lt;split [404/43]&gt; Fold10</code></pre>
+</div>
+</div>
+</section>
+<section id="especificações-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="especificações-dos-dados">Especificações dos dados</h2>
+<p>Já removi as características que considerei não relevantes. Agora, vamos detalhar os passos deste procedimento.</p>
+<ul>
+<li>Tratamento dos valores ausentes nas variáveis preditoras e no alvo.</li>
+<li>Normalização aplicada apenas às variáveis preditoras.</li>
+<li>Abordagem dos dados faltantes nas variáveis categóricas por meio de um modelo de árvore bagged.</li>
+<li>Agregação das categorias pouco frequentes sob o rótulo “outro”.</li>
+<li>Utilização da codificação one-hot nas variáveis categóricas.</li>
+</ul>
+<p>(Neste ponto, surge a dúvida sobre a aplicação da codificação one-hot para a variável “categoria_icm”, que possui uma ordem natural)</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-16_be6758e8e59098bca92ff5c48dad78b0">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>base_rec <span class="ot">&lt;-</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(weight <span class="sc">~</span>.,<span class="at">data =</span> train) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_mean</span>(<span class="fu">all_numeric</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_bag</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_other</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">threshold =</span> <span class="fl">0.02</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a> base_rec <span class="sc">%&gt;%</span> <span class="fu">prep</span>() <span class="sc">%&gt;%</span> <span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>) <span class="co">#%&gt;% skimr::skim()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 447 × 23
+      imc height weight categoria_imc_Abaixo.do.peso categoria_imc_Obesidade.I
+    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;                        &lt;dbl&gt;                     &lt;dbl&gt;
+ 1 -0.948 -1.87    57                              0                         0
+ 2 -1.07  -2.09    54                              0                         0
+ 3 -1.35  -0.973   57                              0                         0
+ 4 -0.779 -1.87    59                              0                         0
+ 5 -1.39  -2.09    50                              0                         0
+ 6 -1.33  -1.53    54                              0                         0
+ 7  0      0       85.1                            0                         0
+ 8 -1.18  -1.87    54                              0                         0
+ 9 -1.33  -1.87    52                              0                         0
+10 -0.800 -1.53    61                              0                         0
+# ℹ 437 more rows
+# ℹ 18 more variables: categoria_imc_Obesidade.III &lt;dbl&gt;,
+#   categoria_imc_Peso.normal &lt;dbl&gt;, categoria_imc_Sobrepeso &lt;dbl&gt;,
+#   categoria_imc_other &lt;dbl&gt;, super_strength_FALSE. &lt;dbl&gt;,
+#   super_strength_TRUE. &lt;dbl&gt;, invulnerability_FALSE. &lt;dbl&gt;,
+#   invulnerability_TRUE. &lt;dbl&gt;, gender_Female &lt;dbl&gt;, gender_Male &lt;dbl&gt;,
+#   eye_color_black &lt;dbl&gt;, eye_color_blue &lt;dbl&gt;, eye_color_brown &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+</section>
+<section id="especificações-do-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="especificações-do-modelo">Especificações do modelo</h2>
+<p>Para esta tarefa de regressão, vou adotar uma abordagem ligeiramente distinta. Em vez de selecionar um único modelo, vou elaborar “receitas” para três modelos diferentes e, em seguida, compará-los.</p>
+<p>Os modelos selecionados são Random Forest, MARS (Multivariate Adaptive Regression Splines) e Regressão Linear.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-17_6ac98b03148c276f9a314a1ca0c9e6de">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rf_spec <span class="ot">&lt;-</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rand_forest</span>(<span class="at">trees =</span> <span class="fl">1e3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>mars_spec <span class="ot">&lt;-</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mars</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>   <span class="fu">set_engine</span>(<span class="st">"earth"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">linear_reg</span>()<span class="co">#usando o defoult</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="criando-um-fluxo-de-trabalho" class="level2">
+<h2 class="anchored" data-anchor-id="criando-um-fluxo-de-trabalho">Criando um fluxo de trabalho</h2>
+<p>Utilizando a função “workflow_set”, é possível ajustar todos os modelos de forma simultânea.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-18_70c42ed1ee93108e6069cc32fe050ebd">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>heroes_set <span class="ot">&lt;-</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow_set</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(base_rec),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(rf_spec,mars_spec,lm_spec),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cross =</span> FALSE<span class="co">#as receitas são específicas para os modelos</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>heroes_set</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A workflow set/tibble: 3 × 4
+  wflow_id           info             option    result    
+  &lt;chr&gt;              &lt;list&gt;           &lt;list&gt;    &lt;list&gt;    
+1 recipe_rand_forest &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;
+2 recipe_mars        &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;
+3 recipe_linear_reg  &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="ajustando-o-modelo-aos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="ajustando-o-modelo-aos-dados">Ajustando o modelo aos dados</h2>
+<p>Agora, ao empregar “workflow_map”, é possível aplicar todas as receitas desenvolvidas às partições de treinamento criadas.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-19_9d3303d2be77d87a18121cfe6b162eee">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>doParallel<span class="sc">::</span><span class="fu">registerDoParallel</span>()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">789</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>heroes_rs <span class="ot">&lt;-</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">workflow_map</span>(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  heroes_set,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"fit_resamples"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> cv_folds</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>heroes_rs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A workflow set/tibble: 3 × 4
+  wflow_id           info             option    result   
+  &lt;chr&gt;              &lt;list&gt;           &lt;list&gt;    &lt;list&gt;   
+1 recipe_rand_forest &lt;tibble [1 × 4]&gt; &lt;opts[1]&gt; &lt;rsmp[+]&gt;
+2 recipe_mars        &lt;tibble [1 × 4]&gt; &lt;opts[1]&gt; &lt;rsmp[+]&gt;
+3 recipe_linear_reg  &lt;tibble [1 × 4]&gt; &lt;opts[1]&gt; &lt;rsmp[+]&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="avaliando-os-resultados" class="level2">
+<h2 class="anchored" data-anchor-id="avaliando-os-resultados">Avaliando os resultados</h2>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-20_14c45880f88766b47f86aa89ccb58d6a">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(heroes_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="regression_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Os resultados apresentaram pouca diferença entre si, porém, o modelo Randon Forest mostrou uma leve vantagem. Apesar disso, vou optar por prosseguir com o modelo linear, já que ele é mais simples de interpretar. (E também porque os dados exibem uma relação linear)</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-21_f50ee4e876cda7eeb6fc9391526443fd">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(heroes_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 9
+  wflow_id         .config preproc model .metric .estimator   mean     n std_err
+  &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+1 recipe_rand_for… Prepro… recipe  rand… rmse    standard   11.0       9  0.638 
+2 recipe_rand_for… Prepro… recipe  rand… rsq     standard    0.780     9  0.0292
+3 recipe_mars      Prepro… recipe  mars  rmse    standard   11.5       9  0.798 
+4 recipe_mars      Prepro… recipe  mars  rsq     standard    0.754     9  0.0318
+5 recipe_linear_r… Prepro… recipe  line… rmse    standard   10.9       9  0.927 
+6 recipe_linear_r… Prepro… recipe  line… rsq     standard    0.770     9  0.0355</code></pre>
+</div>
+</div>
+<p>Aqui, podemos avaliar as métricas de todos os modelos que foram ajustados. Conforme mencionei, optarei por seguir com o modelo linear.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-22_0a6f467b2ea58ba316c3e2029ddb929e">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>final_fit <span class="ot">&lt;-</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_workflow</span>(heroes_rs, <span class="st">"recipe_linear_reg"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vamos acessar os resultados do modelo e analisar a magnitude da influência de cada variável no peso dos personagens.</p>
+<div class="cell" data-hash="regression_cache/html/unnamed-chunk-23_0c1b974bc50c5b028a0884a67daa2638">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(final_fit) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 23 × 5
+   term                         estimate std.error statistic   p.value
+   &lt;chr&gt;                           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+ 1 (Intercept)                     99.7      7.55     13.2    1.32e-33
+ 2 imc                             11.0      1.51      7.28   1.57e-12
+ 3 height                           7.08     0.854     8.29   1.43e-15
+ 4 categoria_imc_Abaixo.do.peso   -28.6      8.67     -3.30   1.05e- 3
+ 5 categoria_imc_Obesidade.I       -2.21     6.64     -0.332  7.40e- 1
+ 6 categoria_imc_Obesidade.III     -9.07     6.20     -1.46   1.44e- 1
+ 7 categoria_imc_Peso.normal      -19.1      7.46     -2.57   1.06e- 2
+ 8 categoria_imc_Sobrepeso        -13.7      6.74     -2.04   4.23e- 2
+ 9 categoria_imc_other             NA       NA        NA     NA       
+10 super_strength_FALSE.           -1.12     1.52     -0.736  4.62e- 1
+# ℹ 13 more rows</code></pre>
+</div>
+</div>
+<p>Os resultados mostram na primeira coluna os coeficientes estimados para cada variável, indicando a magnitude e direção da influência no peso dos personagens. Os valores de erro padrão e estatística do teste auxiliam na avaliação da significância estatística das estimativas. Valores de valor p menores indicam uma maior evidência contra a hipótese nula de que o coeficiente é igual a zero. No entanto, observe que a variável “categoria_imc_other” possui valores ausentes (NA). Isso exige uma análise adicional para compreender seu impacto no modelo.</p>
+</section>
+<section id="respostas" class="level2">
+<h2 class="anchored" data-anchor-id="respostas">Respostas</h2>
+<ol type="1">
+<li>Qual algoritmo você escolheu e por quê?</li>
+</ol>
+<p>Ao analisarmos as relações entre as variáveis contínuas e a variável alvo, é possível observar uma clara relação linear. No entanto, para esta tarefa, optei por realizar uma comparação entre três modelos distintos: regressão linear, Random Forest e MARS (Multivariate Adaptive Regression Splines).</p>
+<ol start="2" type="1">
+<li>Como você avalia o desempenho do seu algoritmo neste caso?</li>
+</ol>
+<p>Apesar de não ser o modelo que obteve o melhor resultado, a regressão linear demonstrou um ajuste satisfatório aos dados. Ela foi capaz de explicar um pouco mais de 75% da variação nos dados. Isso indica que o modelo está capturando adequadamente a relação entre as variáveis independentes e a variável dependente.</p>
+<p>(As métricas dos modelos estão oscilando cada vez que eu gero o documento. Não tenho certeza do motivo, mas deve ser algum processo aleátorio interno dos modelos usados)</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

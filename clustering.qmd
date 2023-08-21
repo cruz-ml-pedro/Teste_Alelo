@@ -1,0 +1,296 @@
+---
+title: "Agrupamento"
+format:
+  html: 
+    toc: true
+editor: visual
+---
+
+```{r}
+pacman::p_load(tidyverse ,tidymodels,fpc, factoextra, psych, hopkins, cluster, knitr)
+
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE, warning = FALSE,
+                      message = FALSE, echo = TRUE, dpi = 180,
+                      fig.width = 8, fig.height = 5)
+```
+
+# Tarefa de Clustering
+
+## Abordagem escolhida
+
+Para esta tarefa, optei pelo algoritmo K-means, convertendo os dados categóricos em binários. Minha escolha recai nessa direção, pois apesar de eu não estar familiarizado com métodos de agrupamento para dados categóricos, compreendo que sua interpretação é mais direta. Portanto, para simplificar, optei por transformar as variáveis categóricas em binárias usando a codificação one-hot.
+
+Sei que existem outras técnicas para lidar com esse tipo de dados, como o método k-prototype, por exemplo. Entretanto, a implementação dessa abordagem, que presumo ser mais apropriada, começou a consumir considerável tempo. Essa circunstância motivou-me a alterar minha estratégia.
+
+Essa mudança de abordagem teve como objetivo permitir um progresso mais eficiente em minha análise.
+
+### Vamos começar carregando os dados.
+
+Ao carregar os dados eu alterei a classe das colunas de logic para character. Isso vai me facilitar mais para frente.
+
+```{r}
+dados_prontos <- readr::read_csv("dados_limpos.csv") %>% 
+dplyr::select(-1) %>% 
+  mutate(
+    across(where(is.logical), as.character)
+  )
+```
+
+### "Corrigindo" os dados
+
+Vou começar criando um plano de ação para lidar com diversos "problemas" nos dados, incluindo o fato de o K-means ser um algoritmo projetado para dados numéricos, o que requer a transformação das variáveis categóricas em dummies.
+
+Aqui está o que será feito:
+
+Remoção da coluna "name": A coluna "name" será removida.
+
+-   Tratamento de valores faltantes em variáveis categóricas: Os valores faltantes nas variáveis categóricas serão tratados usando um modelo KNN (K-Nearest Neighbors).
+
+-   Tratamento de valores faltantes em variáveis numéricas: Os valores faltantes nas variáveis numéricas serão tratados usando os valores médios da coluna.
+
+-   Tratamento de categorias desbalanceadas: Categorias com desbalanceamento serão agrupadas em uma categoria "other".
+
+-   Transformação de categorias em binárias: As categorias serão transformadas em variáveis binárias usando a codificação one-hot.
+
+-   Normalização de colunas numéricas: As colunas numéricas serão normalizadas, e uma transformação Box-Cox será testada para aproximar a distribuição da normalidade.
+
+-   Remoção de variáveis altamente dispersas e desbalanceadas: A função step_nzv() será usada para remover variáveis que são altamente dispersas e desbalanceadas.
+
+(Apenas para esclarecer, ao remover as variáveis com baixa frequência relativa, minha intenção era a mesma do método step_nzv(). Após realizar alguns testes, considerando a remoção e a não remoção das variáveis, optei por removê-las da maneira descrita no documento de limpeza de dados e, por uma questão de segurança, escolhi também utilizar a função mencionada.)
+
+```{r}
+recipe_kmeans <-
+  recipe(~ ., data = dados_prontos) %>%
+  step_rm(name, gender, alignment,
+          eye_color,hair_color,race,
+          publisher,categoria_imc,
+          height, imc, weight) %>%
+  #step_impute_knn(all_nominal_predictors(), neighbors = 5) %>%
+  #step_other(all_nominal_predictors(), threshold = 0.1) %>% 
+  step_impute_mean(all_numeric_predictors()) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  #step_BoxCox(all_numeric_predictors()) %>%
+  step_dummy(all_nominal_predictors(), one_hot = TRUE) %>% 
+  step_nzv()
+```
+
+Após conduzir alguns testes, decidi remover algumas das variáveis. Essa escolha será devidamente justificada mais adiante; por enquanto, menciono isso apenas para explicar as linhas comentadas na seção de criação da "receita" dos dados.
+
+"Preparando" a receita e visualizando os dados.
+
+```{r}
+#vamos ver como os dados ficaram
+dados_cluster <- 
+  recipe_kmeans %>%
+  prep() %>%
+  bake(new_data = NULL)
+
+head(dados_cluster)
+```
+
+Durante a etapa de preparação dos dados, removi os nomes dos personagens. Agora, irei reinseri-los como nomes das linhas. Isso possibilitará visualizar os nomes dos personagens nos clusters.
+
+```{r}
+#colocando os nomes novamente nos dados
+dados_cluster <- tibble(dados_prontos[,1], dados_cluster) %>% 
+  column_to_rownames(var = "name")
+```
+
+## Pré-diagnósticos - tendência de agrupamento.
+
+Antes de iniciarmos, vamos verificar a tendência dos dados para serem clusterizados.
+
+```{r}
+hopkins::hopkins(dados_cluster)
+
+```
+
+Um valor de aproximadamente 1 em um teste de Hopkins indica que os pontos no conjunto de dados têm uma tendência significativa de se agruparem mais próximos uns dos outros do que de pontos gerados aleatoriamente. Em outras palavras, um valor próximo de 1 sugere que há uma forte tendência de formação de clusters nos seus dados, o que é um indicativo positivo para a aplicação de algoritmos de clusterização.
+
+Vamos prosseguir com mais um teste.
+
+```{r}
+cor_mix <- model.matrix(~0+., data = dados_cluster) %>% 
+  cor(use = "pairwise.complete.obs")
+
+psych::KMO(cor_mix)
+```
+
+Um valor de KMO mais baixo (por exemplo, abaixo de 0.5) pode sugerir que as correlações entre as variáveis não são muito robustas, o que pode tornar a interpretação dos fatores mais desafiadora.
+
+Os resultados dos testes acabaram sendo um pouco conflitantes, no entanto, vamos continuar.
+
+## Número ideal de clusters
+
+Vamos determinar o número ideal de clusters para nossos dados. Faremos isso usando a função fviz_nbclust do pacote factoextra e três métodos empíricos diferentes: silhouette, wss e gap_stat.
+
+```{r}
+factoextra::fviz_nbclust(dados_cluster,
+             FUNcluster = kmeans,
+             method = c("silhouette"),
+             k.max = 8,
+            nboot = 100)
+
+```
+
+```{r}
+factoextra::fviz_nbclust(dados_cluster,
+             FUNcluster = kmeans,
+             method = c("wss"),
+             k.max = 8,
+            nboot = 100)
+
+```
+
+```{r}
+factoextra::fviz_nbclust(dados_cluster,
+             FUNcluster = kmeans,
+             method = c("gap_stat"),
+             k.max = 8,
+            nboot = 100)
+
+```
+
+Os resultados indicam que o número ideal de grupos pode estar entre 2 e 3.
+
+## usando k-mean
+
+Vamos testar os valores de 2 e 3 grupos.
+
+### Dois Grupos
+
+```{r}
+set.seed(456)
+k2<- stats::kmeans(dados_cluster, centers = 2, nstart = 50)
+```
+
+```{r}
+factoextra::fviz_cluster(k2,data = dados_cluster, star.plot = TRUE)
+```
+
+### Três grupos
+
+```{r}
+set.seed(789)
+k3 <- stats::kmeans(dados_cluster, centers = 3, nstart = 50)
+```
+
+```{r}
+factoextra::fviz_cluster(k3,data = dados_cluster, star.plot = TRUE)
+```
+
+Eu conduzi testes utilizando diferentes variáveis. A configuração de cluster que apresentou os melhores resultados com todos os dados disponíveis foi a de 2 grupos. No entanto, ao realizar um teste apenas com as variáveis relacionadas aos poderes dos personagens, o resultado mais favorável foi obtido com três grupos.
+
+Os resultados para dois grupos foram bastante consistentes, tanto considerando quanto desconsiderando as informações dos dados em heroes_information. Porém, quando avaliamos três grupos, os resultados com a inclusão dessas variáveis não demonstraram uma separação tão clara.
+
+A seguir estão os resultados obtidos com todas as variáveis para fins de comparação.
+
+Resultado com todas as variáveis para 3 clusters:
+
+```{r, out.width = "80%%", fig.align = "center", echo=FALSE}
+knitr::include_graphics("completo_2.png")
+```
+
+Resultado com todas as variáveis para 3 clusters:
+
+```{r, out.width = "80%%", fig.align = "center", echo=FALSE}
+knitr::include_graphics("completo_3.png")
+```
+
+## Avaliando os clusters
+
+Vou comparar somente os resultados obtidos após a remoção das variáveis provenientes dos dados heroes_information.
+
+Resultados para 2 clusters:
+
+```{r}
+cls <- cluster.stats(dados_cluster, k2$cluster)
+
+cls$pearsongamma
+cls$entropy
+
+```
+
+Resultados para 3 clusters:
+
+```{r}
+cls <-cluster.stats(dados_cluster, k3$cluster)
+cls$pearsongamma
+cls$entropy
+```
+
+Ambos os resultados possuem valores do índice Pearson Gamma próximos de 0, o que sugere que há uma associação limitada entre os clusters comparados.
+
+No entanto, o valor de entropia foi menor para o resultado de dois clusters, 0.68. Valores de entropia mais próximos de 0 indicam uma melhor separação entre os clusters.
+
+Outra abordagem para avaliar os resultados é utilizar a proporção TotWithinSS/TotSS. Essa proporção auxilia na avaliação da qualidade do agrupamento, indicando o quanto da variabilidade total dos dados é explicada pelos clusters. Quanto maior a proporção, mais eficaz é o agrupamento.
+
+A proporção explicada nos resultados com dois grupos é:
+
+```{r}
+k2$tot.withinss / k2$totss
+```
+
+A proporção explicada nos resultados com dois grupos é:
+
+```{r}
+k3$tot.withinss / k3$totss
+```
+
+Os resultados foram bastante semelhantes, mas na minha opinião, a divisão em três grupos parece mais apropriada, mesmo que os resultados sejam um pouco inferiores.
+
+Uma explicação possível, que se aplica tanto a dois grupos quanto a três grupos, é a seguinte:
+
+## Conclusão
+
+Minha interpretação dos agrupamentos é a seguinte:
+
+Os personagens podem ser divididos em três grupos: o Grupo 2 consiste em personagens mais fracos, provavelmente humanos com algumas habilidades. O Grupo 1 engloba os personagens intermediários, com certo nível de poder. E o Grupo 3 é composto pelos personagens mais fortes.
+
+A utilização das variáveis vindas dos dados heroes_information, parece ter causado uma pior separação quando usado 3 grupos.
+
+A descrição inicial da preparação dos dados acabou ficando um pouco mais concisa devido à remoção de parte dos dados após os testes.
+
+## Resposta das perguntas
+
+1.  Qual algoritmo você escolheu e por quê?
+
+Conforme mencionado inicialmente, a escolha do algoritmo K-means foi motivada pelo fato de ser relativamente simples de entender e interpretar. Além disso, o K-means é altamente flexível, podendo ser aplicado em uma ampla gama de domínios e tipos de dados. Ele não demanda suposições específicas sobre a distribuição dos dados, o que o torna uma escolha versátil para diferentes cenários.
+
+Embora o K-means não exija suposições específicas sobre a distribuição dos dados, você realizou tentativas nesse sentido durante a preparação dos dados.
+
+2.  Quais recursos você usou e por quê? Explique qualquer pré-processamento ou engenharia de recursos (seleção) que você executou.
+
+Espero que a resposta para essa pergunta tenha sido abordada de maneira adequada na seção de limpeza de dados e também no início desta seção de clusterização. Além disso, parte da seleção de recursos foi realizada após a realização de diversos testes.
+
+Vou resumir novamente os principais pontos abordados:
+
+-   Remoção de colunas em que a frequência relativa dos casos positivos era inferior a 10%.
+-   Tratamento de valores ausentes em variáveis categóricas utilizando um modelo KNN ("bagged tree" foi escolhido devido ao tempo de processamento).
+-   Tratamento de valores ausentes em variáveis categóricas usando a imputação dos valores médios da coluna.
+-   Tratamento de categorias desbalanceadas através da agregação em uma categoria "other".
+-   Conversão das categorias em variáveis binárias usando a codificação one-hot.
+-   Normalização das colunas numéricas e experimentação com a transformação Box-Cox para aproximação da distribuição normal.
+-   Remoção de variáveis que possuíam alta dispersão e desbalanceamento usando a função step_nzv().
+
+3.  Um dos desafios do clustering é definir o número certo de clusters. Como você escolheu esse número? Como você avalia a qualidade dos clusters finais?
+
+Minha abordagem para escolher o número de clusters foi baseada na utilização de métodos empíricos amplamente empregados. Por meio dos gráficos gerados pelos métodos do cotovelo, silhueta e gap estatístico, foi possível identificar uma faixa de valores prováveis para o número de grupos no conjunto de dados. Essas quantidades foram posteriormente selecionadas e comparadas por meio de diversas métricas.
+
+Os resultados obtidos parecem promissores, uma vez que os grupos foram separados de maneira relativamente clara e discernível.
+
+## Salvando os dados
+
+```{r}
+dados_prontos <- dados_prontos %>% 
+  mutate(
+    grupo = k3$cluster, 
+    grupo = case_when(
+           grupo == 3 ~ "forte",
+           grupo == 1 ~ "intermediario",
+           grupo == 2 ~ "fraco"
+         )
+  )
+
+write.csv(dados_prontos, file = "dados_clust.csv")
+```

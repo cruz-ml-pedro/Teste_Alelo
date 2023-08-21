@@ -1,0 +1,363 @@
+---
+title: "Cleaning"
+format:
+  html: 
+    toc: true
+editor: visual
+---
+
+# Super Heros Dataset - Limpeza
+
+Antes de iniciar as tarefas propostas, vou realizar uma série de verificações em relação à qualidade dos dados.
+
+Vamos começar carregando os pacotes necessários e padronizando alguns aspectos da saída do documento, como o tamanho das figuras e as opções de formatação dos trechos de código. Em seguida vou carregar os dados.
+
+```{r}
+pacman::p_load(tidyverse, janitor, DataExplorer,readr, knitr)
+
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE, warning = FALSE,
+                      message = FALSE, echo = TRUE, dpi = 180,
+                      fig.width = 8, fig.height = 5)
+```
+
+## Carregando e avaliando os dados
+
+Optei por baixar os dados e salvá-los na pasta do projeto, eliminando assim a necessidade de informar um caminho específico até eles.
+
+```{r}
+
+heroes_information <- 
+  read_csv("heroes_information.csv")
+
+super_hero_powers <- 
+  read_csv("super_hero_powers.csv")
+```
+
+Uma vez carregados, vou visualizar algumas informações básicas dos dados. Começarei com o conjunto de dados `heroes_information`.
+
+```{r}
+head(heroes_information)
+
+head(summary(heroes_information))
+```
+
+O conjunto de dados "heroes_information" possui tanto variáveis categóricas como numéricas. No entanto, é possível observar que a classe das variáveis está definida como "character" e há valores faltantes, tanto em variáveis categóricas quanto numéricas.
+
+Os valores faltantes nos dados numéricos são indicados por -99 e NA. Dado que valores negativos não fazem sentido no contexto dos dados, a presença do valor -99 indica de fato a ausência de valor, da mesma forma que o NA. Portanto, ambos os valores, -99 e NA, indicam que os dados numéricos estão incompletos.
+
+As variáveis categóricas têm seus valores faltantes representados por "-", com exceção da coluna "Publisher", que contém NA para os valores ausentes.
+
+Agora, vamos abordar esses pontos.
+
+### Limpando os dados heroes_information
+
+Abaixo, realizaremos as seguintes ações: remover a primeira coluna, substituir -99 e - por NA e converter as colunas da classe "character" para "factor".
+
+```{r}
+heroes_information <- 
+  heroes_information %>% 
+  janitor::clean_names() %>% 
+  dplyr::select(-1) %>% 
+  mutate(
+    across(where(is.double), ~ if_else(. == -99, NA_real_, .)),
+    across(where(is.character), ~ if_else(. == "-", NA, .)),
+    across(where(is.character), as.factor),
+    name = as.character(name)
+    )
+```
+
+Vou verificar a existência de duplicatas e, caso existam, removê-las.
+
+```{r}
+heroes_information <- 
+  heroes_information %>% 
+  filter(!duplicated(name))
+
+
+head(heroes_information)
+```
+
+19 linhas foram removidas.
+
+```{r}
+head(summary(heroes_information))
+```
+
+Com exceção das colunas "alignment", "publisher" e "gender", todas as outras variáveis possuem um grande número de valores ausentes.
+
+Existem classes que estão separadas devido a erros ortográficos e de digitação, como "Black Hair" e "black hair". No entanto, isso ocorre em classes com baixíssima frequência de ocorrência e provavelmente serão agrupadas em algum momento. Por enquanto, não vou realizar modificações nesse aspecto.
+
+A coluna "skin_color" praticamente não possui registros, com mais de 50% de ausências, e será descartada.
+
+```{r}
+heroes_information <- 
+  heroes_information %>% 
+  dplyr::select(-skin_color)
+```
+
+vamos verificar se existêm linhas problemáticas e remove-las
+
+```{r}
+# Porcentagem de valores faltantes permitida (50%)
+limite_faltantes <- 0.5
+
+# Função para verificar porcentagem de valores faltantes em uma linha
+porcentagem_faltantes <- function(linha) {
+  sum(is.na(linha)) / length(linha)
+}
+
+# Filtrar e remover linhas com mais de 50% de valores faltantes
+heroes_information <- heroes_information %>%
+dplyr::filter(porcentagem_faltantes(row) <= limite_faltantes)
+```
+
+Aparentemente, nenhuma linha possui mais do que 50% de informações ausentes.
+
+Os demais problemas desse conjunto de dados serão tratados posteriormente, dependendo do tipo de tarefa que será realizada.
+
+Os principais problemas desse conjunto até agora foram:
+
+-   Muitos valores ausentes
+-   Classes desbalanceadas
+
+Antes de prosseguir para as visualizações, vou criar algumas variáveis que possam ser úteis para as tarefas solicitadas.
+
+### Criando novas variáveis - heroes_information
+
+Neste momento, vou criar um índice de massa corporal (IMC) e 6 categorias relacionadas a esse índice. Isso me permitirá avaliar o quão "fit" os personagens estão.
+
+É importante notar que essas novas variáveis também serão influenciadas pelos problemas descritos anteriormente.
+
+```{r}
+heroes_information <- 
+  heroes_information %>% 
+  janitor::clean_names() %>% 
+        mutate(
+          imc = round(weight/((height/100)^2),digits=1),
+          categoria_imc = case_when(
+                    imc < 18.5 ~ "Abaixo do peso",
+                    imc >= 18.5 & imc <= 24.9 ~ "Peso normal",
+                    imc >= 25 & imc <= 29.9 ~ "Sobrepeso",
+                    imc >= 30 & imc <= 34.9 ~ "Obesidade I",
+                    imc >= 35 & imc <= 39.9 ~ "Obesidade II",
+                    imc >= 40 ~ "Obesidade III"
+                    )
+        )
+```
+
+### Limpando os dados super_hero_powers
+
+Agora, vou dar uma olhada no segundo conjunto de dados.
+
+```{r}
+head(super_hero_powers)
+
+head(summary(super_hero_powers))
+```
+
+O conjunto de dados "super_hero_powers" é composto por variáveis lógicas, e muitas delas!
+
+Nenhuma delas possui valores faltantes. No entanto, diversas colunas apresentam um desbalanceamento considerável.
+
+Vou verificar a presença de duplicatas nos dados.
+
+```{r}
+super_hero_powers <- 
+  super_hero_powers %>% 
+  filter(!duplicated(hero_names))
+```
+
+Nenhuma linha foi removida.
+
+Como observamos, nenhuma delas possui valores ausentes, eliminando a necessidade de verificar linhas problemáticas, exceto por duplicatas.
+
+### Criando novas variáveis - heroes_information
+
+Agora, irei criar uma variável que represente a quantidade de poderes que cada personagem possui.
+
+```{r}
+super_hero_powers <- 
+  super_hero_powers %>% 
+  mutate(
+    n_poderes = rowSums(across(where(is.logical)))
+  ) 
+```
+
+Como mencionei, há um grande número de colunas e várias delas apresentam baixa frequência relativa. Essa situação pode levar a problemas na interpretação dos resultados, na precisão dos modelos e nas métricas de avaliação. Portanto, irei agrupar todas as variáveis que possuam uma distribuição altamente desequilibrada (10%).
+
+```{r}
+
+# Função para calcular frequência relativa de TRUE
+frequencia_true <- function(coluna) {
+  sum(coluna) / length(coluna)
+}
+
+# Identificar colunas com frequência relativa de TRUE menor que 10%
+colunas_raras <- 
+  super_hero_powers %>%
+  summarise(across(where(is.logical), ~ frequencia_true(.))) %>%
+  unlist() %>% 
+  .[. < 0.1] %>% 
+  names()
+
+# Criar a nova coluna UncommonPower
+super_hero_powers <- 
+  super_hero_powers %>%
+  mutate(
+    UncommonPower = ifelse(rowSums(dplyr::select(., all_of(colunas_raras))) > 0, TRUE, FALSE)
+    ) %>%
+  dplyr::select(-all_of(colunas_raras))
+
+```
+
+Eu fiz um esforço para manter as informações possíveis dessas variáveis antes de realizar a exclusão. Isso foi feito criando uma contagem total do número de poderes antes da remoção. Além disso, a coluna que foi criada com as colunas excluídas também contém informações relacionadas a essas colunas que foram removidas.
+
+Apesar de existirem técnicas mais elaboradas para a redução de dimensões, e embora algo similar seja alcançável por meio de métodos de regularização, não estou muito familiarizado com essas técnicas. Por isso, achei mais adequado seguir com a abordagem que descrevi.
+
+## Combinando os dados
+
+Agora vou unificar os dois bancos de dados para aproveitar ao máximo as informações na criação dos modelos.
+
+A função inner_join retornará apenas as linhas onde há correspondências nas colunas de junção.
+
+```{r}
+heroes_combined <- 
+  inner_join(
+  heroes_information,
+  super_hero_powers,
+  by = join_by(name==hero_names)
+  ) %>% 
+  janitor::clean_names()
+
+head(heroes_combined)
+```
+
+```{r}
+str(heroes_combined)
+```
+
+## 1º EDA
+
+Agora que os dados foram unificados, vamos criar algumas visualizações dos dados.
+
+Vou comentar esse código, uma vez que ele gera um relatório em HTML.
+
+```{r, echo=FALSE}
+
+# heroes_combined %>% 
+#   DataExplorer::create_report(
+#     report_title = "Relatório_01",
+#     config = configure_report(
+#       add_introduce = TRUE,
+#       add_plot_intro = TRUE,
+#       add_plot_str = FALSE,
+#       add_plot_missing = TRUE,
+#       add_plot_histogram = TRUE,
+#       add_plot_qq = TRUE,
+#       add_plot_density = FALSE,
+#       add_plot_bar = TRUE,
+#       add_plot_correlation = FALSE,
+#       add_plot_prcomp = FALSE,
+#       add_plot_boxplot = TRUE,
+#       add_plot_scatterplot = TRUE
+#       )
+#     )
+```
+
+Existem variáveis categóricas desbalanceadas. É possível observar que as variáveis categóricas relacionadas aos atributos físicos possuem contagens frequentemente altas de NA. Isso pode ser devido ao uso de uniformes, máscaras, entre outros fatores. Seria viável criar uma variável para representar essa informação?
+
+Parece que os dados contínuos não apresentam uma distribuição normal e também possuem valores atípicos (outliers). Vamos proceder com a verificação utilizando o teste de Shapiro-Wilk.
+
+```{r}
+# Aplicar o teste de Shapiro-Wilk e apresentar os resultados de forma tidy
+heroes_combined %>%
+  dplyr::select(height,weight,imc) %>% 
+  summarise(across(everything(), ~ broom::tidy(shapiro.test(.)))) %>%
+  pivot_longer(everything(), names_to = "variavel", values_to = "resultado") 
+
+```
+
+De fato, os dados não exibem uma distribuição normal.
+
+### Remoção de valores atípicos.
+
+Vamos agora identificar e substituir os valores atípicos (outliers).
+
+Vamos proceder da seguinte maneira: substituiremos os valores que estão abaixo do limite inferior $(Q1 - 1,5 \times IQR)$ pelo valor do 5º percentil e substituiremos os valores excepcionalmente altos acima do limite superior $(Q3 + 1,5 \times IQR)$ pelo valor do 95º percentil.
+
+```{r}
+# Função para substituir outliers
+substituir_outliers <- function(x) {
+  if (any(!is.na(x))) {
+    quantiles <- quantile(x[!is.na(x)], c(0.25, 0.75))
+    iqr <- quantiles[2] - quantiles[1]
+    lower_fence <- quantiles[1] - 1.5 * iqr
+    upper_fence <- quantiles[2] + 1.5 * iqr
+    x <- ifelse(!is.na(x), ifelse(x < lower_fence, quantiles[1], ifelse(x > upper_fence, quantiles[2], x)), x)
+  }
+  x
+}
+
+# Identificar colunas numéricas
+colunas_numericas <- heroes_combined %>% dplyr::select(where(is.numeric)) %>% colnames()
+
+# Substituir outliers nas colunas numéricas
+heroes_combined <- heroes_combined %>%
+  mutate(across(all_of(colunas_numericas), substituir_outliers))
+```
+
+### Verificando a correlação
+
+Vamos analisar a correlação entre os dados numéricos. Essa informação será útil tanto para identificar possíveis problemas de colinearidade quanto para a tarefa de regressão. Optei pelo teste de Spearman por ser mais robusto a aoutliers e ausência de normalidade da distribuição.
+
+```{r}
+dados_numericos <- 
+  heroes_combined %>% 
+  dplyr::select(height,weight,imc) %>% 
+  tidyr::drop_na()
+
+# Calcular a matriz de correlação
+matriz_correlacao <- cor(dados_numericos, method = "spearman")
+
+print(matriz_correlacao)
+```
+
+É importante manter em mente que a variável "peso" está altamente correlacionada com o IMC. Essa correlação era esperada, considerando que o IMC foi calculado a partir do peso e da altura.
+
+Vou verificar novamente a distribução dos dados.
+
+```{r}
+# Aplicar o teste de Shapiro-Wilk e apresentar os resultados de forma tidy
+heroes_combined %>%
+  dplyr::select(height,weight,imc) %>% 
+  tidyr::drop_na() %>% 
+  summarise(across(everything(), ~ broom::tidy(shapiro.test(.)))) %>%
+  pivot_longer(everything(), names_to = "variavel", values_to = "resultado") 
+
+```
+
+É relevante observar que a remoção dos outliers não resultou na normalização da distribuição dos dados. Isso é um aspecto importante a ser considerado ao criar os modelos.
+
+A seguir, vou salvar os dados em um arquivo .csv para utilizá-lo nas próximas etapas.
+
+## Salvando os dados
+
+```{r}
+#Salvando os dados
+
+write.csv(heroes_combined, file = "dados_limpos.csv")
+
+```
+
+## Principais pontos:
+
+-   Substituição de valores ausentes, tanto numéricos como categóricos, por NA.
+-   Remoção de linhas duplicadas.
+-   Criação de uma variável numérica IMC.
+-   Criação de uma variável categórica a partir do IMC.
+-   Criação de uma variável para representar o número total de poderes por personagem.
+-   Substituição de outliers.
+-   Verificação da correlação entre valores numéricos.
+-   Identificação de alta correlação entre peso e IMC.
+-   Redução do número de variáveis categóricas raras entre as amostras.
+-   Observação de que os dados numéricos ainda não apresentam distribuição normal.

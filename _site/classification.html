@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Teste_Alelo - Classificação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Teste_Alelo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html" rel="" target="">
+ <span class="menu-text">index</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./cleaning.html" rel="" target="">
+ <span class="menu-text">Cleaning</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./clustering.html" rel="" target="">
+ <span class="menu-text">Clustering</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./classification.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Classificação</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./regression.html" rel="" target="">
+ <span class="menu-text">Regressão</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./bonus.html" rel="" target="">
+ <span class="menu-text">Bônus</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#classificação" id="toc-classificação" class="nav-link active" data-scroll-target="#classificação">Classificação</a>
+  <ul class="collapse">
+  <li><a href="#verificar-independencia-das-variáveis" id="toc-verificar-independencia-das-variáveis" class="nav-link" data-scroll-target="#verificar-independencia-das-variáveis">verificar independencia das variáveis</a></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
+  <li><a href="#seleção-de-recursos" id="toc-seleção-de-recursos" class="nav-link" data-scroll-target="#seleção-de-recursos">Seleção de recursos</a></li>
+  <li><a href="#divisão-treinoteste" id="toc-divisão-treinoteste" class="nav-link" data-scroll-target="#divisão-treinoteste">Divisão Treino/Teste</a></li>
+  <li><a href="#especificações-do-modelo" id="toc-especificações-do-modelo" class="nav-link" data-scroll-target="#especificações-do-modelo">Especificações do modelo</a></li>
+  <li><a href="#especificações-dos-dados" id="toc-especificações-dos-dados" class="nav-link" data-scroll-target="#especificações-dos-dados">Especificações dos dados</a>
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  </ul></li>
+  <li><a href="#criando-um-fluxo-de-trabalho" id="toc-criando-um-fluxo-de-trabalho" class="nav-link" data-scroll-target="#criando-um-fluxo-de-trabalho">Criando um fluxo de trabalho</a></li>
+  <li><a href="#ajustando-o-modelo" id="toc-ajustando-o-modelo" class="nav-link" data-scroll-target="#ajustando-o-modelo">Ajustando o modelo</a></li>
+  <li><a href="#avaliando-os-resultados" id="toc-avaliando-os-resultados" class="nav-link" data-scroll-target="#avaliando-os-resultados">Avaliando os resultados</a></li>
+  </ul></li>
+  <li><a href="#modelo-da-minha-escolha" id="toc-modelo-da-minha-escolha" class="nav-link" data-scroll-target="#modelo-da-minha-escolha">Modelo da minha escolha</a>
+  <ul class="collapse">
+  <li><a href="#especificações-do-modelo-1" id="toc-especificações-do-modelo-1" class="nav-link" data-scroll-target="#especificações-do-modelo-1">Especificações do modelo</a></li>
+  <li><a href="#criando-um-fluxo-de-trabalho-1" id="toc-criando-um-fluxo-de-trabalho-1" class="nav-link" data-scroll-target="#criando-um-fluxo-de-trabalho-1">Criando um fluxo de trabalho</a></li>
+  <li><a href="#avaliando-os-resultados-1" id="toc-avaliando-os-resultados-1" class="nav-link" data-scroll-target="#avaliando-os-resultados-1">avaliando os resultados</a></li>
+  <li><a href="#avaliando-os-recursos-mais-importantes." id="toc-avaliando-os-recursos-mais-importantes." class="nav-link" data-scroll-target="#avaliando-os-recursos-mais-importantes.">Avaliando os recursos mais importantes.</a></li>
+  <li><a href="#respostas" id="toc-respostas" class="nav-link" data-scroll-target="#respostas">Respostas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Classificação</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">cache =</span> <span class="cn">TRUE</span>, <span class="at">cache.lazy =</span> <span class="cn">FALSE</span>, <span class="at">warning =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">message =</span> <span class="cn">FALSE</span>, <span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">dpi =</span> <span class="dv">180</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">fig.width =</span> <span class="dv">8</span>, <span class="at">fig.height =</span> <span class="dv">5</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse ,tidymodels,klaR, discrim, themis, finetune, FactoMineR,xgboost )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-2_6c5cc867ab79976f0e20b50a7f19273a">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"dados_limpos.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="ot">&lt;-</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">across</span>(<span class="fu">where</span>(is.logical), as.integer)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="classificação" class="level1">
+<h1>Classificação</h1>
+<p>O algoritmo Naive Bayes assume independência entre as características (variáveis preditoras) do conjunto de dados, o que nem sempre é verdade na prática. Apesar dessa simplificação, o algoritmo Naive Bayes é eficaz em muitos cenários e é especialmente útil para classificação de texto e problemas com muitas características.</p>
+<section id="verificar-independencia-das-variáveis" class="level2">
+<h2 class="anchored" data-anchor-id="verificar-independencia-das-variáveis">verificar independencia das variáveis</h2>
+<p>Para verificar a independência das variáveis eu vou usar Análise de Correspondência Múltipla (MCA).</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-3_10566ed0750372cbdd0c36ac905a4a08">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mca_result <span class="ot">&lt;-</span> FactoMineR<span class="sc">::</span><span class="fu">MCA</span>(dados_prontos, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-4_5a32cc2a75e8baca547fd4d37aaa59a0">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de Correlação</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>FactoMineR<span class="sc">::</span><span class="fu">plot.MCA</span>(mca_result, <span class="at">choix =</span> <span class="st">"var"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-5_c67e22907c1cdfe1c8a0797fb03e33fc">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de Correlação</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>FactoMineR<span class="sc">::</span><span class="fu">plot.MCA</span>(mca_result, <span class="at">choix =</span> <span class="st">"ind"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>A análise realizada indica que os dados não atendem ao pressuposto do método Naive-Bayes. Além disso, é possível observar algumas características da estrutura dos dados. Mesmo com uma baixa variabilidade explicada pelas dimensões fatoriais, é possível compreender quais variáveis contribuem mais, a direção de suas contribuições e quais variáveis apresentam padrões de comportamento semelhantes.</p>
+</section>
+<section id="eda" class="level2">
+<h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<p>Vou começar dando uma olhada na contagem da variável alvo.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-6_318bff05d2d165fec34d99d6b9acfb5c">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  alignment     n
+  &lt;chr&gt;     &lt;int&gt;
+1 bad         192
+2 good        420
+3 neutral      24
+4 &lt;NA&gt;          7</code></pre>
+</div>
+</div>
+<p>Uma questão que surgiu diz respeito a se o foco está exclusivamente em categorias “bom” e “mau”, ou se também inclui personagens neutros. Como a pergunta menciona “bom” ou “mau”, a decisão que vou adotar é não considerar os personagens neutros. Essa escolha é baseada em evitar o desafio de lidar com classes significativamente desequilibradas.</p>
+<p>Vou começar selecionando apenas os personagens classificados como “bom” ou “mau”.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-7_77f16b8645fe385e37ed495cea03fce0">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="ot">&lt;-</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  dados_prontos <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(alignment <span class="sc">==</span> <span class="st">"good"</span> <span class="sc">|</span> alignment <span class="sc">==</span> <span class="st">"bad"</span>)<span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>     <span class="fu">across</span>(<span class="fu">where</span>(is.character), as.factor),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>     <span class="co">#across(where(is_logical), as.factor)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="seleção-de-recursos" class="level2">
+<h2 class="anchored" data-anchor-id="seleção-de-recursos">Seleção de recursos</h2>
+<p>Vamos visualizar a distribuição da nossa variável alvo em relação às variáveis categóricas.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-8_e69d85fb20c6cdf592e5b3c252b1c814">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment,gender) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n, <span class="at">fill =</span> gender))<span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(gender),<span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Em relação ao gênero, é possível observar um número maior de personagens “maus” no gênero masculino em comparação ao feminino. Esse tipo de padrão é benéfico para o aprendizado do nosso modelo. No entanto, a análise visual por si só não é suficiente. É necessário conduzir testes estatísticos para confirmar se essa diferença é estatisticamente significativa e se uma amostra diferente produziria resultados semelhantes. Isso nos permitirá determinar se de fato há uma proporção maior de personagens “maus” no gênero masculino do que no feminino.</p>
+<p>Contudo, devido minha ingerência em relação ao tempo vou pular essa etapa e fazer algo não recomendável que é selecionar os recursos no “olhômetro”. Essa abordagem pode levar a resultados subótimos, ou mesmo ruins, uma vez que não há garantia de que as diferenças observadas sejam estatisticamente significativas ou realmente informativas para o modelo.</p>
+<p>Nosso alvo em relação a cor dos olhos.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-9_e3e1e84fd1ebbfe9d593a2f5dbd27942">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">eye_color =</span> <span class="fu">fct_lump</span>(eye_color, <span class="at">prop =</span> <span class="fl">0.05</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment,eye_color) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n, <span class="at">fill =</span> eye_color))<span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(eye_color),<span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>A variável “cor dos olhos” aparentemente apresenta padrões que o modelo pode utilizar para aprender. Portanto, vou optar por manter essa coluna no conjunto de dados.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-10_c75f4e7b3d48a52a4d9e8b598125a99e">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">race =</span> <span class="fu">fct_lump</span>(race, <span class="at">prop =</span> <span class="fl">0.05</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment,race) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n, <span class="at">fill =</span> race))<span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(race),<span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Parece que essa variável também contém estruturas que podem ser aproveitadas pelo modelo.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-11_4dd361efeacef5e87475f89a63667321">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">hair_color =</span> <span class="fu">fct_lump</span>(hair_color, <span class="at">prop =</span> <span class="fl">0.05</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment,hair_color) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n, <span class="at">fill =</span> hair_color))<span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(hair_color),<span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Essa variável também será mantida no conjunto de dados.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-12_a2f3bc4c537ae0c273d756e7e5f8aeac">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">publisher =</span> <span class="fu">fct_lump</span>(publisher, <span class="at">prop =</span> <span class="fl">0.05</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment,publisher) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n, <span class="at">fill =</span> publisher))<span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(publisher),<span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Essa variável também será mantida no conjunto de dados.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-13_77470dd59b8ab74e44471c37f616696a">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">categoria_imc =</span> <span class="fu">fct_lump</span>(categoria_imc, <span class="at">prop =</span> <span class="fl">0.05</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment,categoria_imc) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n, <span class="at">fill =</span> categoria_imc))<span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(categoria_imc),<span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Parece que os personagens classificados como “good” têm uma tendência a serem mais “fit”. Portanto, vou optar por manter essa coluna no conjunto de dados.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-14_e18c5956257db3fd0597d14aabf8248f">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(alignment,<span class="fu">as.character</span>(uncommon_power)) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n))<span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Não apresentarei todos os resultados, mas parece que os tipos de poderes não fornecem informações significativas sobre o alinhamento dos personagens.</p>
+<p>Agora vamos examinar como o nosso alvo se relaciona com os valores numéricos.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-15_e5f6a1b1cb40b5c6ba5e395b257c2bf6">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,height, <span class="at">color=</span>alignment))<span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Os valores da categoria “bad” possuem uma média mais elevada, alinhando-se com o intervalo interquartil superior dos indivíduos classificados como “good”. No entanto, os intervalos interquartis das duas distribuições apresentam sobreposição. Portanto, as considerações feitas anteriormente sobre os testes estatísticos permanecem relevantes para essas análises, e recomenda-se sua aplicação visando à obtenção de resultados mais robustos.</p>
+<p>Os dados ainda exibem valores outliers!</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-16_d6f89d23d8676fa664274c4fd0f282f5">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,weight, <span class="at">color=</span>alignment))<span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Esses resultados são bastante similares aos obtidos anteriormente.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-17_3a5ebb486ebd9a22459205a763b3fcd0">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,imc, <span class="at">color=</span>alignment))<span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>O mesmo…</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-18_14dd34e370af6e84951b66b0ebb1d7bc">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(alignment,n_poderes, <span class="at">color=</span>alignment))<span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Parece que não há diferença significativa para a variável número de poderes. Portanto, não será considerada.</p>
+</section>
+<section id="divisão-treinoteste" class="level2">
+<h2 class="anchored" data-anchor-id="divisão-treinoteste">Divisão Treino/Teste</h2>
+<p>Antes de realizar a divisão dos dados, vou eliminar as variáveis relacionadas ao tipo de poder. Acredito que será mais conveniente fazer isso neste momento.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-19_0e6ddf9d40439136b592ff796ad2e531">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dados_naive <span class="ot">&lt;-</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  dados_naive <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(<span class="sc">~!</span><span class="fu">is.logical</span>(.)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vamos proceder com a divisão dos dados em uma proporção de 70% para treinamento e 30% para teste, mantendo uma distribuição apropriada do alvo em ambos os conjuntos.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-20_3387223125ca3f4e845bddf19ec09628">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">6923</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>heroes_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(dados_naive, <span class="at">strata =</span> <span class="st">"alignment"</span>, <span class="at">prop =</span> <span class="fl">0.7</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">training</span>(heroes_split)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">testing</span>(heroes_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vou criar os “folds” para realizar a validação cruzada dos dados. Utilizando os dados de treino e mantendo a proporção da variável alvo.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-21_6d5e0ab7a039df66ce22690d18ecc040">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3344</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>cv_folds <span class="ot">&lt;-</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vfold_cv</span>(<span class="at">data =</span> train,<span class="at">v =</span> <span class="dv">10</span>,<span class="at">strata =</span> <span class="st">"alignment"</span>) </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>cv_folds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#  10-fold cross-validation using stratification 
+# A tibble: 10 × 2
+   splits           id    
+   &lt;list&gt;           &lt;chr&gt; 
+ 1 &lt;split [384/44]&gt; Fold01
+ 2 &lt;split [384/44]&gt; Fold02
+ 3 &lt;split [384/44]&gt; Fold03
+ 4 &lt;split [384/44]&gt; Fold04
+ 5 &lt;split [386/42]&gt; Fold05
+ 6 &lt;split [386/42]&gt; Fold06
+ 7 &lt;split [386/42]&gt; Fold07
+ 8 &lt;split [386/42]&gt; Fold08
+ 9 &lt;split [386/42]&gt; Fold09
+10 &lt;split [386/42]&gt; Fold10</code></pre>
+</div>
+</div>
+</section>
+<section id="especificações-do-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="especificações-do-modelo">Especificações do modelo</h2>
+<p>Vou elaborar as especificações do modelo, que será o Naive-Bayes, para executar a tarefa de classificação.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-22_578f901f0bcc04213c74cfa355650e1d">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>nb_model <span class="ot">&lt;-</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">naive_Bayes</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"klaR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="especificações-dos-dados" class="level2">
+<h2 class="anchored" data-anchor-id="especificações-dos-dados">Especificações dos dados</h2>
+<p>Agora vou elaborar as diretrizes que serão empregadas para o processamento dos dados.</p>
+<p>Neste estágio:</p>
+<ul>
+<li><p>Eliminação da coluna “peso”, pois apresenta uma correlação significativa com o índice de massa corporal (IMC).</p></li>
+<li><p>Remoção do número de poderes, uma vez que não contém informações úteis.</p></li>
+<li><p>Os tipos de poder já foram excluídos, pois também não são esclarecedores.</p></li>
+<li><p>Tratamento dos valores ausentes nas colunas categóricas.</p></li>
+<li><p>Consolidação das classes com baixa frequência em uma categoria denominada “other”.</p></li>
+<li><p>Abordagem para lidar com valores ausentes nas variáveis numéricas.</p></li>
+<li><p>Padronização dos valores numéricos.</p></li>
+<li><p>Aplicação da codificação “one-hot” para as variáveis categóricas.</p></li>
+<li><p>Eliminação de colunas com variância próxima a zero e aquelas de baixa frequência.</p></li>
+<li><p>Implementação do método de upsampling para mitigar o desequilíbrio nas classes do nosso alvo.</p></li>
+</ul>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-23_4cc550c75652bed09d0c4369f5740e77">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>heroes_rec <span class="ot">&lt;-</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(alignment <span class="sc">~</span> .,<span class="at">data =</span> train) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_rm</span>(name,weight, n_poderes, height, imc) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_knn</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">neighbors =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_other</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">threshold =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_impute_mean</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#step_BoxCox(all_numeric_predictors()) %&gt;%</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>(), <span class="at">one_hot =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_nzv</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_upsample</span>(alignment)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>heroes_rec <span class="sc">%&gt;%</span> <span class="fu">prep</span>() <span class="sc">%&gt;%</span> <span class="fu">bake</span>(<span class="at">new_data =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 588 × 45
+   agility accelerated_healing durability stealth energy_absorption flight
+     &lt;dbl&gt;               &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;             &lt;dbl&gt;  &lt;dbl&gt;
+ 1  -0.776              -0.573     -0.791  -0.483            -0.347 -0.645
+ 2  -0.776              -0.573     -0.791  -0.483            -0.347 -0.645
+ 3  -0.776               1.74      -0.791  -0.483            -0.347 -0.645
+ 4  -0.776              -0.573     -0.791  -0.483            -0.347 -0.645
+ 5  -0.776               1.74      -0.791  -0.483            -0.347  1.55 
+ 6   1.29               -0.573      1.26   -0.483            -0.347  1.55 
+ 7  -0.776              -0.573     -0.791  -0.483            -0.347  1.55 
+ 8  -0.776              -0.573      1.26    2.07             -0.347 -0.645
+ 9  -0.776              -0.573      1.26   -0.483            -0.347 -0.645
+10  -0.776              -0.573     -0.791  -0.483            -0.347 -0.645
+# ℹ 578 more rows
+# ℹ 39 more variables: marksmanship &lt;dbl&gt;, weapons_master &lt;dbl&gt;,
+#   longevity &lt;dbl&gt;, intelligence &lt;dbl&gt;, super_strength &lt;dbl&gt;, telepathy &lt;dbl&gt;,
+#   energy_blasts &lt;dbl&gt;, stamina &lt;dbl&gt;, super_speed &lt;dbl&gt;, teleportation &lt;dbl&gt;,
+#   enhanced_senses &lt;dbl&gt;, immortality &lt;dbl&gt;, reflexes &lt;dbl&gt;,
+#   invulnerability &lt;dbl&gt;, force_fields &lt;dbl&gt;, enhanced_hearing &lt;dbl&gt;,
+#   uncommon_power &lt;dbl&gt;, alignment &lt;fct&gt;, gender_Female &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="criando-um-fluxo-de-trabalho" class="level2">
+<h2 class="anchored" data-anchor-id="criando-um-fluxo-de-trabalho">Criando um fluxo de trabalho</h2>
+<p>Vou estabelecer o fluxo de trabalho utilizando as diretrizes definidas para o modelo e para o tratamento dos dados.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-24_7cde7f031747f45872ed555e10021de7">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>heroes_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(heroes_rec) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(nb_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ajustando-o-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="ajustando-o-modelo">Ajustando o modelo</h2>
+<p>Vou ajustar o modelo aos dados de treinamento, utilizando os “folds” criados.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-25_362f534b17ec9dc61e9ac8e2466d1a4a">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>nb_fit <span class="ot">&lt;-</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  heroes_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit_resamples</span>(</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">resamples =</span> cv_folds</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(nb_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric  .estimator  mean     n std_err .config             
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary     0.630    10  0.0296 Preprocessor1_Model1
+2 roc_auc  binary     0.672    10  0.0284 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+<p>Realizando previsões nos dados de teste.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-26_c8eca40890e367ec1cc3730cb00e3f8f">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>nb_final <span class="ot">&lt;-</span> heroes_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">last_fit</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">split =</span> heroes_split</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(nb_final)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  .metric  .estimator .estimate .config             
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary         0.598 Preprocessor1_Model1
+2 roc_auc  binary         0.626 Preprocessor1_Model1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>nb_test_pred <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  test,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  nb_final <span class="sc">%&gt;%</span> <span class="fu">collect_predictions</span>() <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">".pred_"</span>))</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="avaliando-os-resultados" class="level2">
+<h2 class="anchored" data-anchor-id="avaliando-os-resultados">Avaliando os resultados</h2>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-27_5071abf04696bfac523da564fd5bd6b9">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="st">"predicted class"</span> <span class="ot">=</span> nb_test_pred<span class="sc">$</span>.pred_class,</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>      <span class="st">"observed class"</span> <span class="ot">=</span> nb_test_pred<span class="sc">$</span>alignment)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               observed class
+predicted class bad good
+           bad   28   44
+           good  30   82</code></pre>
+</div>
+</div>
+<p>O modelo apresentou um desempenho insatisfatório, especialmente na previsão dos indivíduos classificados como “bad”, onde o número de erros é superior ao de acertos. Isso mostra um viés para a categoria good, que é a classe dominante nos registros. Vale ressaltar que um dos passos que realizei durante o preprocessamento dos dados foi a etapa de “upsampling” com o objetivo de melhorar o equilíbrio entre as classes.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-28_587489a37278e55892b740b60195a4f2">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>nb_test_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">roc_curve</span>(</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> alignment,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    .pred_good</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-29_4c6b28c77ef8927a57541f5efdee3313">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>nb_test_pred <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">roc_curve</span>(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> alignment,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    .pred_bad</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Os resultados das curvas ROC indicam que, no que se refere aos valores da categoria “good”, o modelo não apresenta um desempenho significativamente melhor do que um palpite aleatório. Por outro lado, em relação à categoria “bad”, o modelo está produzindo resultados contrários ao esperado, resultando em erros substanciais de classificação.</p>
+</section>
+</section>
+<section id="modelo-da-minha-escolha" class="level1">
+<h1>Modelo da minha escolha</h1>
+<p>Optei pelo modelo XGBoost pelas razões que serão detalhadas na seção de justificativas.</p>
+<section id="especificações-do-modelo-1" class="level2">
+<h2 class="anchored" data-anchor-id="especificações-do-modelo-1">Especificações do modelo</h2>
+<p>Aqui, utilizei funções que automatizam a afinação de hiperparâmetros, como o número de árvores, o número de pontos por nó e a quantidade de preditores que serão selecionados aleatoriamente em cada divisão durante a criação dos modelos de árvore.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-30_b63e0ad5038a0f1d447fc1148ddd85a5">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>xgb_spec <span class="ot">&lt;-</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boost_tree</span>(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">trees =</span> <span class="fu">tune</span>(),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_n =</span> <span class="fu">tune</span>(),</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="fu">tune</span>(),</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">learn_rate =</span> <span class="fl">0.01</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="criando-um-fluxo-de-trabalho-1" class="level2">
+<h2 class="anchored" data-anchor-id="criando-um-fluxo-de-trabalho-1">Criando um fluxo de trabalho</h2>
+<p>Para estabelecer o fluxo de trabalho, vou empregar a mesma abordagem que foi criada para o modelo Naive-Bayes, realizando modificações apenas nas especificações destinadas ao modelo em questão.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-31_9c12e2890b9658bcf4ae1c1ad0149654">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>xgb_wf <span class="ot">&lt;-</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>(heroes_rec,xgb_spec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Como os folders de cross validação já foram criados podemos ir diréto para o ajuste do modelo.</p>
+<p>Para realizar a afinação dos hiperparâmetros do modelo, vou empregar a função tune_race_anova(), a qual utiliza um método RACE que elimina os modelos que não estão apresentando bom desempenho. Vou usar um valor de 30 para o grid search</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-32_bb7b219a4ea9605f0d5f17d0403c40ef">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(finetune)</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>doParallel<span class="sc">::</span><span class="fu">registerDoParallel</span>()</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">963</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>xgb_rs <span class="ot">&lt;-</span> </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>finetune<span class="sc">::</span><span class="fu">tune_race_anova</span>(</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  xgb_wf,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> cv_folds,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> <span class="dv">30</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">control_race</span>(<span class="at">verbose_elim =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>xgb_rs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Tuning results
+# 10-fold cross-validation using stratification 
+# A tibble: 10 × 5
+   splits           id     .order .metrics          .notes          
+   &lt;list&gt;           &lt;chr&gt;   &lt;int&gt; &lt;list&gt;            &lt;list&gt;          
+ 1 &lt;split [384/44]&gt; Fold01      3 &lt;tibble [60 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 2 &lt;split [384/44]&gt; Fold04      1 &lt;tibble [60 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 3 &lt;split [386/42]&gt; Fold08      2 &lt;tibble [60 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 4 &lt;split [386/42]&gt; Fold10      4 &lt;tibble [54 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 5 &lt;split [386/42]&gt; Fold05      5 &lt;tibble [54 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 6 &lt;split [384/44]&gt; Fold02      6 &lt;tibble [52 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 7 &lt;split [386/42]&gt; Fold09      7 &lt;tibble [50 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 8 &lt;split [386/42]&gt; Fold06      8 &lt;tibble [44 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 9 &lt;split [384/44]&gt; Fold03      9 &lt;tibble [40 × 7]&gt; &lt;tibble [0 × 3]&gt;
+10 &lt;split [386/42]&gt; Fold07     10 &lt;tibble [32 × 7]&gt; &lt;tibble [0 × 3]&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="avaliando-os-resultados-1" class="level2">
+<h2 class="anchored" data-anchor-id="avaliando-os-resultados-1">avaliando os resultados</h2>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-33_f6d9ff0f22cb5e3cf0c0acef6fb3cf76">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_race</span>(xgb_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-34_6dc3f6f60f46437dc94e448e2a00e800">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(xgb_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 32 × 9
+    mtry trees min_n .metric  .estimator  mean     n std_err .config            
+   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;              
+ 1     1  1417    24 accuracy binary     0.663    10  0.0205 Preprocessor1_Mode…
+ 2     1  1417    24 roc_auc  binary     0.674    10  0.0254 Preprocessor1_Mode…
+ 3     4  1743    27 accuracy binary     0.654    10  0.0215 Preprocessor1_Mode…
+ 4     4  1743    27 roc_auc  binary     0.678    10  0.0272 Preprocessor1_Mode…
+ 5     6   496    30 accuracy binary     0.642    10  0.0248 Preprocessor1_Mode…
+ 6     6   496    30 roc_auc  binary     0.671    10  0.0274 Preprocessor1_Mode…
+ 7    10   647    21 accuracy binary     0.659    10  0.0174 Preprocessor1_Mode…
+ 8    10   647    21 roc_auc  binary     0.669    10  0.0278 Preprocessor1_Mode…
+ 9    12   849    13 accuracy binary     0.668    10  0.0174 Preprocessor1_Mode…
+10    12   849    13 roc_auc  binary     0.677    10  0.0263 Preprocessor1_Mode…
+# ℹ 22 more rows</code></pre>
+</div>
+</div>
+<p>Selecionando o melhor resultado obtido a partir do processo de ajuste de hiperparâmetros, vou utilizá-lo para realizar o ajuste final do modelo aos dados.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-35_c1cb1449ae5e6049f3daedba60badb15">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>xgb_last <span class="ot">&lt;-</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>xgb_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalize_workflow</span>(<span class="fu">select_best</span>(xgb_rs, <span class="st">"accuracy"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">last_fit</span>(heroes_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vou avaliar novamente as métricas de desempenho do modelo.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-36_e477b1312bc6a6b0a86e18d8405aaecb">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(xgb_last)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  .metric  .estimator .estimate .config             
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary         0.592 Preprocessor1_Model1
+2 roc_auc  binary         0.646 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-37_747e426a10681d788478975db220290e">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_predictions</span>(xgb_last) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">conf_mat</span>(alignment,.pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Truth
+Prediction bad good
+      bad   32   49
+      good  26   77</code></pre>
+</div>
+</div>
+<p>Lamentavelmente, este modelo não demonstrou uma melhoria significativa em relação ao anterior. É provável que eu devesse reconsiderar as características selecionadas para a modelagem.</p>
+</section>
+<section id="avaliando-os-recursos-mais-importantes." class="level2">
+<h2 class="anchored" data-anchor-id="avaliando-os-recursos-mais-importantes.">Avaliando os recursos mais importantes.</h2>
+<p>Agora, vamos investigar quais variáveis estão sendo consideradas as mais importantes pelo modelo. Isso nos permitirá compreender quais características estão exercendo maior influência nas previsões e pode nos fornecer insights para melhorar o desempenho do modelo.</p>
+<div class="cell" data-hash="classification_cache/html/unnamed-chunk-38_3307c5fe809bf5e7f4e8e01688fb9a0f">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#caminho_arquivo &lt;- "C:/Users/marin/Downloads/vip_0.4.0.tar.gz"</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(caminho_arquivo, repos = NULL, type = "source")</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>xgb_last <span class="sc">%&gt;%</span> </span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_fit_engine</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="classification_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>Após a realização de testes…</p>
+<p>As variáveis que se destacam como mais relevantes são IMC e altura. No entanto, elas não pareciam tão informativas durante a EDA. Teria sido prudente realizar algum teste estatístico para verificar isso.</p>
+<p>Vou agora remover essas variáveis e verificar se há alguma melhoria nos modelos…</p>
+<p>Após a eliminação das colunas mencionadas, os resultados estão sugerindo que o peso dos personagens desempenha um papel importante. Lembrando que IMC e peso são altamente correlacionadas. (O modelo não melhorou).</p>
+<p>Uma alternativa adicional, que não foi explorada, é ajustar o modelo utilizando somente as variáveis mais relevantes que foram identificadas. Isso poderia nos fornecer uma abordagem mais focada e possivelmente resultar em um melhor desempenho do modelo.</p>
+</section>
+<section id="respostas" class="level2">
+<h2 class="anchored" data-anchor-id="respostas">Respostas</h2>
+<ol type="1">
+<li>Quais hipóteses assumimos ao usar o algoritmo Naive Bayes?</li>
+</ol>
+<p>A premissa fundamental do Naive Bayes é a suposição de independência entre as características (atributos), condicionada ao valor da classe. Isso implica que a existência ou ausência de uma característica não é influenciada pela presença ou ausência de outras características.</p>
+<p>Outras suposições incluem a igual relevância de todas as características para a classificação.</p>
+<p>(Nenhuma delas foi atendida pelos dados utilizados)</p>
+<ol start="2" type="1">
+<li>Como as características específicas deste conjunto de dados influenciam suas escolhas e resultados de modelagem?</li>
+</ol>
+<p>Confesso que a pergunta não ficou muito clara para mim… No que diz respeito aos resultados da modelagem, eles impactam de forma desfavorável. Além de não atenderem aos pressupostos do modelo, também estão repletos de desafios, como valores ausentes e desequilíbrio entre as classes.</p>
+<ol start="3" type="1">
+<li>Como você avalia os resultados?</li>
+</ol>
+<p>Os resultados não foram favoráveis, resultando em um modelo tendencioso.</p>
+<ol start="4" type="1">
+<li>Agora sinta-se à vontade para executar o algoritmo de classificação que julgar mais adequado para essa tarefa.</li>
+</ol>
+<p>O que motivou sua escolha do algoritmo?</p>
+<p>Minha escolha foi o algoritmo XGBoost, uma ferramenta poderosa e versátil. O XGBoost tem a capacidade de criar modelos complexos capazes de capturar relações não-lineares entre as características. Este algoritmo é eficaz ao lidar com diversos tipos de dados e demonstra robustez em relação a valores discrepantes (outliers) e classes desbalanceadas. Além disso, o XGBoost incorpora mecanismos internos para tratar valores ausentes, o que reduz a necessidade de pré-processamento intensivo. Em resumo, essa escolha se alinha com várias características do conjunto de dados em questão, tornando o XGBoost uma opção indicada.</p>
+<ol start="5" type="1">
+<li>Como esse algoritmo se compara ao Naive Bayes em relação às suposições e resultados da modelagem?</li>
+</ol>
+<p>O XGBoost não faz suposições específicas sobre a distribuição dos dados. Ele constrói modelos complexos que podem se ajustar a padrões variados.O Naive Bayes faz suposições sobre a independência condicional entre recursos, o que pode não ser verdadeiro em todos os casos. Essas suposições podem afetar seu desempenho em dados complexos.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

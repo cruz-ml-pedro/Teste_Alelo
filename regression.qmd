@@ -1,0 +1,323 @@
+---
+title: "Regressão"
+format:
+  html: 
+    toc: true
+editor: visual
+---
+
+```{r}
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE, warning = FALSE,
+                      message = FALSE, echo = TRUE, dpi = 180,
+                      fig.width = 8, fig.height = 5)
+
+pacman::p_load(knitr,tidyverse ,tidymodels,klaR, discrim, themis, finetune, earth, ranger)
+```
+
+```{r}
+dados_prontos <- readr::read_csv("dados_limpos.csv") %>% 
+dplyr::select(-1) 
+```
+
+# Regressão
+
+## EDA
+
+Vou começar essa tarefa com a seleção de recursos. Durante a limpeza dos dados eu cheguei a verificar os valores de correlação entre as variáveis numéricas, mas vamos avalia-las novamente e visualizar sua distribuição.
+
+```{r}
+library(GGally)
+
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  dplyr::select(where(is.numeric)) %>%
+  ggpairs()
+  
+```
+
+As curvas de densidade parecem seguir uma distribuição normal, exceto pela variável "n_poderes", que exibe uma cauda mais longa. Notavelmente, a variável "n_poderes" não demonstra uma correlação significativa com as demais variáveis. Entretanto, "peso" e "altura", "peso" e "IMC", e "IMC" e "altura" exibem correlações notáveis. Os gráficos de dispersão apontam para uma relação linear entre essas variáveis.
+
+Agora vamos verificar como é a distribuição do nosso alvo em relação as variáveis categóricas.
+
+```{r}
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    gender = fct_lump(gender, n=10)
+  ) %>% 
+  ggplot(aes(gender,weight, color=gender))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+A variável "gênero" parece ser uma fonte promissora de informação para o nosso modelo.
+
+```{r}
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    eye_color = fct_lump(eye_color, n=10)
+  ) %>% 
+  ggplot(aes(eye_color,weight, color=eye_color))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+Apesar das limitações associadas à variável "cor dos olhos", ela também parece ser uma valiosa fonte de informações.
+
+```{r}
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    race = fct_lump(race, n=10)
+  ) %>% 
+  ggplot(aes(race,weight, color=race))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+As médias dos valores não parecem exibir grandes discrepâncias ao analisarmos as diferentes raças. É importante ter em mente que algumas categorias têm amostragens reduzidas.
+
+```{r}
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    hair_color = fct_lump(hair_color, n=10)
+  ) %>% 
+  ggplot(aes(hair_color,weight, color=hair_color))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+Da mesma forma que a variável anterior, a cor dos cabelos não parece fornecer muita informação em relação ao peso.
+
+```{r}
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    publisher = fct_lump(publisher, n=10)
+  ) %>% 
+  ggplot(aes(publisher,weight, color=publisher))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+A variável "editora" também não parece ser muito informativa.
+
+```{r}
+dados_prontos %>% 
+tidyr::drop_na() %>% 
+  mutate(
+    alignment = fct_lump(alignment, n=10)
+  ) %>% 
+  ggplot(aes(alignment,weight, color=alignment))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+Não parece que o alinhamento tem relação com o peso.
+
+```{r}
+
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    categoria_imc = fct_lump(categoria_imc, n=10)
+  ) %>% 
+  ggplot(aes(categoria_imc,weight, color=categoria_imc))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+É evidente que essas categorias têm uma forte relação com o peso dos personagens, uma vez que foram construídas a partir das variáveis de peso e altura.
+
+```{r}
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    across(where(is.logical), as.factor),
+    super_strength = fct_lump(super_strength)
+  ) %>% 
+  ggplot(aes(super_strength,weight, color=super_strength))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+Não irei apresentar todos os resultados, mas de maneira geral, as variáveis relacionadas ao tipo de poder não parecem ser informativas.
+
+As únicas variáveis que aparentemente podem ser úteis são "super_strength", "invulnerability" e "durability".
+
+Vamos ver em relação ao número de poderes que cada personagem possui.
+
+```{r}
+dados_prontos %>% 
+  tidyr::drop_na() %>% 
+  mutate(
+    n_poderes = as.factor(n_poderes),
+    n_poderes = fct_lump(n_poderes, n=10)
+  ) %>% 
+  ggplot(aes(n_poderes,weight, color=n_poderes))+
+  geom_boxplot()+
+  theme(legend.position = "none")
+```
+
+A quantidade de poderes de cada personagem aparentemente não possui relação com o peso do personagem. No entanto, essa conclusão pode necessitar de uma análise mais aprofundada. Por enquanto, não vou criar uma variável categórica que represente o número de poderes por personagem.
+
+## construindo modelo
+
+Vou começar selecionando apenas as variáveis que foram escolhidas durante a análise exploratória dos dados.
+
+```{r}
+dados_regre <- dados_prontos %>% 
+ dplyr::select(weight,imc,height,categoria_imc,
+               super_strength,invulnerability,
+               gender,eye_color) %>% 
+  mutate(
+    across(where(is.logical), as.character)
+  ) 
+```
+
+## Divisão Treino/Teste
+
+Esta etapa segue as mesmas especificações, com uma proporção de 70% para treinamento e 30% para teste.
+
+```{r}
+
+set.seed(123)
+
+heroes_split <- initial_split(dados_regre, strata = "weight", prop = 0.7)
+
+train <- training(heroes_split)
+test <- testing(heroes_split)
+```
+
+## Validação cruzada
+
+Criando as partições para executar a validação cruzada.
+
+```{r}
+set.seed(456)
+cv_folds <- vfold_cv(train, strata = "weight")
+
+cv_folds
+```
+
+## Especificações dos dados
+
+Já removi as características que considerei não relevantes. Agora, vamos detalhar os passos deste procedimento.
+
+-   Tratamento dos valores ausentes nas variáveis preditoras e no alvo.
+-   Normalização aplicada apenas às variáveis preditoras.
+-   Abordagem dos dados faltantes nas variáveis categóricas por meio de um modelo de árvore bagged.
+-   Agregação das categorias pouco frequentes sob o rótulo "outro".
+-   Utilização da codificação one-hot nas variáveis categóricas.
+
+(Neste ponto, surge a dúvida sobre a aplicação da codificação one-hot para a variável "categoria_icm", que possui uma ordem natural)
+
+```{r}
+base_rec <- 
+  recipe(weight ~.,data = train) %>% 
+  step_impute_mean(all_numeric()) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_impute_bag(all_nominal_predictors()) %>% 
+  step_other(all_nominal_predictors(), threshold = 0.02) %>% 
+  step_dummy(all_nominal_predictors(), one_hot = TRUE)
+
+ base_rec %>% prep() %>% bake(new_data = NULL) #%>% skimr::skim()
+
+```
+
+## Especificações do modelo
+
+Para esta tarefa de regressão, vou adotar uma abordagem ligeiramente distinta. Em vez de selecionar um único modelo, vou elaborar "receitas" para três modelos diferentes e, em seguida, compará-los.
+
+Os modelos selecionados são Random Forest, MARS (Multivariate Adaptive Regression Splines) e Regressão Linear.
+
+```{r}
+
+rf_spec <- 
+  rand_forest(trees = 1e3) %>% 
+  set_mode("regression") %>% 
+  set_engine("ranger")
+
+mars_spec <-
+   mars() %>% 
+   set_mode("regression") %>%
+   set_engine("earth")
+  
+
+lm_spec <- 
+  linear_reg()#usando o defoult
+```
+
+## Criando um fluxo de trabalho
+
+Utilizando a função "workflow_set", é possível ajustar todos os modelos de forma simultânea.
+
+```{r}
+
+heroes_set <- 
+  workflow_set(
+  list(base_rec),
+  list(rf_spec,mars_spec,lm_spec),
+  cross = FALSE#as receitas são específicas para os modelos
+)
+heroes_set
+```
+
+## Ajustando o modelo aos dados
+
+Agora, ao empregar "workflow_map", é possível aplicar todas as receitas desenvolvidas às partições de treinamento criadas.
+
+```{r}
+doParallel::registerDoParallel()
+set.seed(789)
+
+heroes_rs <- 
+workflow_map(
+  heroes_set,
+  "fit_resamples",
+  resamples = cv_folds
+)
+heroes_rs
+```
+
+## Avaliando os resultados
+
+```{r}
+autoplot(heroes_rs)
+```
+
+Os resultados apresentaram pouca diferença entre si, porém, o modelo Randon Forest mostrou uma leve vantagem. Apesar disso, vou optar por prosseguir com o modelo linear, já que ele é mais simples de interpretar. (E também porque os dados exibem uma relação linear)
+
+```{r}
+collect_metrics(heroes_rs)
+```
+
+Aqui, podemos avaliar as métricas de todos os modelos que foram ajustados. Conforme mencionei, optarei por seguir com o modelo linear.
+
+```{r}
+final_fit <- 
+extract_workflow(heroes_rs, "recipe_linear_reg") %>% 
+  fit(train)
+```
+
+Vamos acessar os resultados do modelo e analisar a magnitude da influência de cada variável no peso dos personagens.
+
+```{r}
+tidy(final_fit) 
+```
+
+Os resultados mostram na primeira coluna os coeficientes estimados para cada variável, indicando a magnitude e direção da influência no peso dos personagens. Os valores de erro padrão e estatística do teste auxiliam na avaliação da significância estatística das estimativas. Valores de valor p menores indicam uma maior evidência contra a hipótese nula de que o coeficiente é igual a zero. No entanto, observe que a variável "categoria_imc_other" possui valores ausentes (NA). Isso exige uma análise adicional para compreender seu impacto no modelo.
+
+## Respostas
+
+1.  Qual algoritmo você escolheu e por quê?
+
+Ao analisarmos as relações entre as variáveis contínuas e a variável alvo, é possível observar uma clara relação linear. No entanto, para esta tarefa, optei por realizar uma comparação entre três modelos distintos: regressão linear, Random Forest e MARS (Multivariate Adaptive Regression Splines).
+
+2.  Como você avalia o desempenho do seu algoritmo neste caso?
+
+Apesar de não ser o modelo que obteve o melhor resultado, a regressão linear demonstrou um ajuste satisfatório aos dados. Ela foi capaz de explicar um pouco mais de 75% da variação nos dados. Isso indica que o modelo está capturando adequadamente a relação entre as variáveis independentes e a variável dependente.
+
+(As métricas dos modelos estão oscilando cada vez que eu gero o documento. Não tenho certeza do motivo, mas deve ser algum processo aleátorio interno dos modelos usados)
