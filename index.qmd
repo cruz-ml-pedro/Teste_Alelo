@@ -10,7 +10,7 @@ Prezado avaliador e interessados na minha candidatura à vaga de Cientista de Da
 
 Agradeço antecipadamente por dedicar tempo à avaliação das minhas soluções. Se você tiver alguma dúvida ou feedback, fique à vontade para entrar em contato através dos do meu email, cruz.ml.pedro\@gmail.com. Estou ansioso para a possibilidade de fazer parte da equipe da Alelo e contribuir para o sucesso contínuo da empresa.
 
-Para acessar os códigos é só acessar o [Link](https://github.com/cruz-ml-pedro/Teste_Alelo)
+Para obter os códigos é só acessar o [Link](https://github.com/cruz-ml-pedro/Teste_Alelo)
 
 Atenciosamente,  
 Pedro Lima  
