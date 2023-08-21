@@ -242,7 +242,7 @@ Agora que os dados foram unificados, vamos criar algumas visualizações dos dad
 
 Vou comentar esse código, uma vez que ele gera um relatório em HTML.
 
-```{r, echo=FALSE}
+```{r}
 
 # heroes_combined %>% 
 #   DataExplorer::create_report(
